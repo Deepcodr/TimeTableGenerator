@@ -142,7 +142,7 @@ if ($_SESSION["userloggedin"] == 1) {
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/TimeTableGenerator/dashboardnew.php" class="nav-link active" aria-current="page">
+                    <a href="/TimeTableGenerator/administration.php" class="nav-link active" aria-current="page">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#home" />
                         </svg>
@@ -166,7 +166,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/generate.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -320,12 +320,12 @@ if ($_SESSION["userloggedin"] == 1) {
                     include 'connection.php';
                     $q = mysqli_query(
                         mysqli_connect("localhost", "root", "root", "Dev"),
-                        "SELECT * FROM associations ORDER BY year ASC"
+                        "SELECT * FROM associations ORDER BY division ASC"
                     );
 
                     while ($row = mysqli_fetch_assoc($q)) {
-                        echo "<tr><td>{$row['staffid']}</td>
-                        <td>{$row['staffname']}</td>
+                        echo "<tr><td>{$row['staffname']}</td>
+                        <td>{$row['staffid']}</td>
                 <td>{$row['subjectcode']}</td>
                 <td>{$row['subjectname']}</td>
                 <td>{$row['division']}</td>

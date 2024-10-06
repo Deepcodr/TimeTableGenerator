@@ -11,7 +11,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     $password=$_REQUEST['password'];
 
     try{
-        $sql=mysqli_prepare($conn,"INSERT INTO users(username,phone,email,password,name) VALUES (?,?,?,?,?)");
+        $sql=mysqli_prepare($conn,"INSERT INTO students(username,phone,email,password,name) VALUES (?,?,?,?,?)");
         $sql->bind_param("sssss",$email,$phone,$email,$password,$name);
     }
     catch(Exception $e)

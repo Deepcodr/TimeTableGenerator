@@ -10,7 +10,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST")
     $sql;
     if($usertype == 0)
     {
-        $sql=$conn->prepare("SELECT * FROM users WHERE username=?");
+        $sql=$conn->prepare("SELECT * FROM students WHERE username=?");
         $sql->bind_param("s",$username);   
     }else if($usertype == 1)
     {
@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"]==="POST")
         $sql->bind_param("s",$username); 
     }else if($usertype == 2)
     {
-        $sql=$conn->prepare("SELECT * FROM staff WHERE staffId=?");
+        $sql=$conn->prepare("SELECT * FROM staff WHERE emailId=?");
         $sql->bind_param("s",$username); 
     }
     $sql->execute();
