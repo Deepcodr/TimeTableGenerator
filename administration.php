@@ -1,19 +1,14 @@
 <?php
-if(session_status() !== PHP_SESSION_ACTIVE)
-{
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
 }
 
-if($_SESSION["userloggedin"]==1)
-{
-  if($_SESSION["adminstatus"]==0)
-  {
+if ($_SESSION["userloggedin"] == 1) {
+  if ($_SESSION["adminstatus"] == 0) {
     echo "You Dont Have Access to this page";
     die();
   }
-}
-else
-{
+} else {
   header("Location: http://localhost/TimeTableGenerator/login.php");
   exit();
 }
@@ -234,16 +229,12 @@ else
             <?php
             if (isset($_SESSION["userloggedin"])) {
               if ($_SESSION["userloggedin"] != 1) {
-                echo '<li class="float-right"><a href="/TimeTableGenerator/login.php"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>';
+                header("Location: http://localhost/TimeTableGenerator/login.php");
               } else {
-                if ($_SESSION["staffstatus"] == 1) {
-                  echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
-                } else {
-                  echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
-                }
+                echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
               }
             } else {
-                echo '<li class="float-right"><a href="/TimeTableGenerator/login.php"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>';
+              header("Location: http://localhost/TimeTableGenerator/login.php");
             }
             ?>
           </strong>

@@ -4,15 +4,7 @@ if(session_status() !== PHP_SESSION_ACTIVE)
 session_start();
 }
 
-if($_SESSION["userloggedin"]==1)
-{
-  if($_SESSION["staffstatus"]!=0)
-  {
-    echo "You Dont Have Access to this page";
-    die();
-  }
-}
-else
+if($_SESSION["userloggedin"]!=1)
 {
   header("Location: http://localhost/TimeTableGenerator/login.php");
   exit();

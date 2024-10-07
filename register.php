@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="./css/login.css">
 </head>
 
-<body style="font-size: 100%;">
+<body class="login-form" style="font-size: 100%;">
 <div id="logreg-forms">
 <!-- onsubmit="return validateRegistration()" -->
     <form action="./services/registeruser.php" method="POST" class="form-signup" >

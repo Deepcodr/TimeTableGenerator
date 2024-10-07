@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="./css/login.css">
 </head>
 
-<body style="font-size: 100%;">
+<body class="login-form" style="font-size: 100%;">
     <?php
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();

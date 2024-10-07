@@ -6,3 +6,8 @@
 .home_link{
     text-decoration: none;
 }
+
+.home_sideback{
+    background-image: url("../static/sideback.jpg");
+    background-size: cover;
+}

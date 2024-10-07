@@ -230,16 +230,12 @@ if ($_SESSION["userloggedin"] == 1) {
                         <?php
                         if (isset($_SESSION["userloggedin"])) {
                             if ($_SESSION["userloggedin"] != 1) {
-                                echo '<li class="float-right"><a href="/TimeTableGenerator/login.php"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>';
+                                header("Location: http://localhost/TimeTableGenerator/login.php");
                             } else {
-                                if ($_SESSION["staffstatus"] == 1) {
-                                    echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
-                                } else {
-                                    echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
-                                }
+                                echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
                             }
                         } else {
-                            echo '<li class="float-right"><a href="/TimeTableGenerator/login.php"><i class="fa-solid fa-right-to-bracket"></i>Login</a></li>';
+                            header("Location: http://localhost/TimeTableGenerator/login.php");
                         }
                         ?>
                     </strong>
@@ -263,7 +259,6 @@ if ($_SESSION["userloggedin"] == 1) {
                 <form action="./services/associateData.php" method="POST" class="form-signup">
                     <select name="staff" class="form-control">
                         <?php
-                        include 'connection.php';
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
                             "SELECT * FROM staff"
@@ -288,7 +283,7 @@ if ($_SESSION["userloggedin"] == 1) {
                         <option value="3">Three</option> -->
                     </select>
                     <select id="subjectselection" name="subject" class="form-control">
-                    <option selected disabled>Select Subject</option>
+                        <option selected disabled>Select Subject</option>
                     </select>
                     <select id="divisionselection" class="form-select" aria-label="Default select example" name="division">
                         <option selected disabled>Select Division</option>
@@ -317,7 +312,6 @@ if ($_SESSION["userloggedin"] == 1) {
                 </tr>
                 <tbody>
                     <?php
-                    include 'connection.php';
                     $q = mysqli_query(
                         mysqli_connect("localhost", "root", "root", "Dev"),
                         "SELECT * FROM associations ORDER BY division ASC"
@@ -360,7 +354,7 @@ if ($_SESSION["userloggedin"] == 1) {
         };
 
         // Send the selected value as POST data
-        xhr.send("year=" + e +"&data=subjects");
+        xhr.send("year=" + e + "&data=subjects");
 
         var xhr1 = new XMLHttpRequest();
 
@@ -379,8 +373,8 @@ if ($_SESSION["userloggedin"] == 1) {
         };
 
         // Send the selected value as POST data
-        xhr1.send("year=" + e+"&data=divisions");
-        
+        xhr1.send("year=" + e + "&data=divisions");
+
     }
 </script>
 

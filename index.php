@@ -14,34 +14,28 @@
 ?>
 
 <body>
-    <div class="container-fluid">
-        <div class="container text-center" style="height: 20vh;">
-            <h1 class="display-1 p-4">Welcome To Time Table Generator</h1>
-        </div>
-        <div class="container d-flex justify-content-between align-items-center" style="height: 80vh;">
-            <div class="card" style="width: 18rem; height:10rem;">
-                <div class="card-body text-center d-flex align-items-center justify-content-center login_btn">
-                    <button class="btn btn-transparent">
-                        <a href="/TimeTableGenerator/login.php" class="home_link"><h1 class="card-text text-light">Login</h1></a>
-                    </button>
-                </div>
+    <section class="py-5 d-flex align-items-center min-vh-100 position-relative">
+        <div class="container">
+            <div class="col-md-4 d-none d-md-block h-100 position-absolute top-0 start-0 bg-success" style="z-index:-2;">
+                 
             </div>
-            <div class="card" style="width: 18rem; height:10rem;">
-                <div class="card-body text-center d-flex align-items-center justify-content-center login_btn">
-                    <button class="btn btn-transparent">
-                    <a href="/TimeTableGenerator/register.php" class="home_link"><h1 class="card-text text-light">Register</h1></a>
-                    </button>
-                </div>
+            <div class="col-md-8 h-100 position-absolute top-0 end-0 bg-light-subtle home_sideback" style="z-index:-2;">
+                 
             </div>
-            <div class="card" style="width: 18rem; height:10rem;">
-                <div class="card-body text-center d-flex align-items-center justify-content-center login_btn">
-                    <button class="btn btn-transparent">
-                    <a href="/TimeTableGenerator/administration.php" class="home_link"><h1 class="card-text text-light">Administration</h1></a>
-                    </button>
+            <div class="row">
+                <div class="col-xl-5 col-lg-6">
+                    <div class="bg-white p-5 shadow">
+                        <h1 class="display-3 fw-bold">Welcome to the <span class="text-success">TimeTable Generator</span></h1>
+                        <p class="lead my-4">Application for automatic generation of Engineering Timetables.</p>
+                        <a class="btn btn-lg btn-success" href="/TimeTableGenerator/login.php">Login</a>
+                        <a class="btn btn-lg btn-success" href="/TimeTableGenerator/register.php">Register</a>
+                        <a class="btn btn-lg btn-success" href="/TimeTableGenerator/administration.php">Administration</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    <!-- </div> -->
 </body>
 
 </html>

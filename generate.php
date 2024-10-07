@@ -260,7 +260,6 @@
         <form action="./services/generatett.php" method="POST" class="form-signup">
             <!-- <select name="staff" class="form-control"> -->
             <!-- <?php
-                    include 'connection.php';
                     $q = mysqli_query(
                         mysqli_connect("localhost", "root", "root", "Dev"),
                         "SELECT * FROM staff"

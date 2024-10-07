@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // echo $lecidarr[0];
     // echo json_encode($lecidarr);
 
-    $divisions = ['A', 'B' , 'C'];
+    $divisions = ['A', 'B', 'C'];
 
     $divisioncnt = array(
         "A" => 1,
@@ -159,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // shuffle($extended_substaff);
     // echo json_encode($extended_substaff);
 
-    function generate_timetable_per_divisionv1($extended_substaff, &$timetable, $days, $slots_per_day, $divisioncnt)
+    function generate_timetable_per_divisionv1($extended_substaff, &$timetable, $days, $slots_per_day, $divisioncnt, $divisions)
     {
         foreach ($extended_substaff as $division => $divlecturedata) {
             // shuffle($divdata);
@@ -172,25 +172,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // echo json_encode($lecturedata);
                 // echo "\n";
                 foreach ($days as $day) {
-                    $subset=0;
+                    $subset = 0;
                     for ($slot = 1; $slot <= $slots_per_day; $slot++) {
                         if ($slot == 3) {
                             continue;
                         } else if ($slot == 6) {
                             continue;
-                        } else if ($timetable[$day][$slot] != null && (count($timetable[$day][$slot]) == $divisioncnt[$division] || count($timetable[$day][$slot]) == $divisioncnt["C"])) {
+                        } else if ($timetable[$day][$slot] != null && (count($timetable[$day][$slot]) == $divisioncnt[$division])) {
                             continue;
                         } else {
-                            if ($timetable[$day][$slot] == null && $division == "A") {
+                            // if ($timetable[$day][$slot] == null && $division == "A") {
+                            //     $timetable[$day][$slot][$lecturedata["staff"]] = $lecturedata["subject"];
+                            //     $subset=1;
+                            // } 
+                            // else 
+                            if ($timetable[$day][$slot] != null && count($timetable[$day][$slot]) == ($divisioncnt[$division] - 1) && $timetable[$day][$slot][$lecturedata["staff"]] == null) {
+
                                 $timetable[$day][$slot][$lecturedata["staff"]] = $lecturedata["subject"];
-                                $subset=1;
-                                break;
+                                $subset = 1;
+                                // break;
                                 // $divsublctrcnt = $divsublctrcnt - 1;
                             } else if ($timetable[$day][$slot][$lecturedata["staff"]] == null) {
+
+                                $initcount = $timetable[$day][$slot]!=null?count($timetable[$day][$slot]):0;
+                                for ($i = $initcount; $i < $divisioncnt[$division] - 1; $i++) {
+                                    $timetable[$day][$slot][$day . $slot . "-Free-" . $divisions[$i]] = "Free";
+                                }
+
                                 $timetable[$day][$slot][$lecturedata["staff"]] = $lecturedata["subject"];
-                                $subset=1;
-                                break;
-                                // $divsublctrcnt = $divsublctrcnt - 1;
+                                $subset = 1;
+                            } else {
+                                $timetable[$day][$slot][$slot . "-Free-" . $division] = "Free";
                             }
                         }
                         if ($subset == 1) {
@@ -201,7 +213,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         break;
                     }
                 }
+                // foreach($days as $day)
+                // {
+                //     for ($slot = 1; $slot <= $slots_per_day; $slot++) {
+                //         if ($slot == 3) {
+                //             continue;
+                //         } else if ($slot == 6) {
+                //             continue;
+                //         } else if ($timetable[$day][$slot] != null && (count($timetable[$day][$slot]) == $divisioncnt[$division])) {
+                //             continue;
+                //         } else {
+                //             if ($timetable[$day][$slot][$divisioncnt[$division]-1] == null) {
+                //                 $timetable[$day][$slot][$slot."-Free-".$division]= "Free";
+                //             }
+                //         }
+                //     }
+                // }
             }
+
             // }
         }
     }
@@ -243,9 +272,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // // Call the function to assign the subjects to divisions considering faculty
     // generate_timetable_per_divisionv0($associations, $sublctrmap, $timetable, $days, $slots_per_day, $divisioncnt);
-    generate_timetable_per_divisionv1($extended_substaff,  $timetable, $days, $slots_per_day, $divisioncnt);
+    generate_timetable_per_divisionv1($extended_substaff,  $timetable, $days, $slots_per_day, $divisioncnt, $divisions);
 
-    // echo json_encode($timetable);
+    // echo json_encode($extended_substaff);
+    echo "\n";
+    echo json_encode($timetable);
     // echo $timetable['C']==null;
     // Function to display the timetable for each division in an HTML table
     function display_timetable($timetable, $divisions, $days, $divisioncnt, $time_slots)
