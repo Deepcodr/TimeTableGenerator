@@ -17,14 +17,12 @@
     <section class="py-5 d-flex align-items-center min-vh-100 position-relative">
         <div class="container">
             <div class="col-md-4 d-none d-md-block h-100 position-absolute top-0 start-0 bg-success" style="z-index:-2;">
-                 
             </div>
             <div class="col-md-8 h-100 position-absolute top-0 end-0 bg-light-subtle home_sideback" style="z-index:-2;">
-                 
             </div>
             <div class="row">
                 <div class="col-xl-5 col-lg-6">
-                    <div class="bg-white p-5 shadow">
+                    <div class="bg-white p-5 shado w">
                         <h1 class="display-3 fw-bold">Welcome to the <span class="text-success">TimeTable Generator</span></h1>
                         <p class="lead my-4">Application for automatic generation of Engineering Timetables.</p>
                         <a class="btn btn-lg btn-success" href="/TimeTableGenerator/login.php">Login</a>

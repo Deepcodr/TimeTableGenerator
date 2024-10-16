@@ -5,7 +5,6 @@ include('../includes/dbconnection.php');
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $associations = [];
     $subjects = [];
-
     // $lecturedata = $_POST["TK01"];
 
     $subcnt = count($_POST);
@@ -275,7 +274,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     generate_timetable_per_divisionv1($extended_substaff,  $timetable, $days, $slots_per_day, $divisioncnt, $divisions);
 
     // echo json_encode($extended_substaff);
-    echo "\n";
+    // echo "\n";
     echo json_encode($timetable);
     // echo $timetable['C']==null;
     // Function to display the timetable for each division in an HTML table
@@ -335,5 +334,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // Display the generated timetable for both divisions
-    display_timetable($timetable, $divisions, $days, $divisioncnt, $time_slots);
+    // display_timetable($timetable, $divisions, $days, $divisioncnt, $time_slots);
 }

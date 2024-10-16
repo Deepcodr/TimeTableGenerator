@@ -85,7 +85,7 @@
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
 
             <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
-            <a href="#" id="forgot_pswd">Forgot password?</a>
+            <!-- <a href="#" id="forgot_pswd">Forgot password?</a> -->
             <hr>
             <!-- <p>Don't have an account!</p>  -->
             <button class="btn btn-primary btn-block" type="button" id="btn-signup"><i class="fas fa-user-plus"></i><a href="./register.php">Sign up New Account</a></button>

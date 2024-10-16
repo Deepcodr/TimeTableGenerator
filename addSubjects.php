@@ -166,7 +166,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/generate.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -174,27 +174,11 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/associate.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#people-circle" />
                         </svg>
                         Associate Staff
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Divisions
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Labs
                     </a>
                 </li>
                 <li>
@@ -211,6 +195,14 @@ if ($_SESSION["userloggedin"] == 1) {
                             <use xlink:href="#people-circle" />
                         </svg>
                         Add Divisions
+                    </a>
+                </li>
+                <li>
+                    <a href="/TimeTableGenerator/addBatches.php" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#people-circle" />
+                        </svg>
+                        Add Batches
                     </a>
                 </li>
                 <li>
@@ -235,7 +227,8 @@ if ($_SESSION["userloggedin"] == 1) {
                                 echo '<li class="float-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' . $_SESSION["username"] . '</li>';
                             }
                         } else {
-                            header("Location: http://localhost/TimeTableGenerator/login.php");                        }
+                            header("Location: http://localhost/TimeTableGenerator/login.php");
+                        }
                         ?>
                     </strong>
                 </a>
@@ -251,21 +244,34 @@ if ($_SESSION["userloggedin"] == 1) {
             </div>
         </div>
         <!-- <div class="b-example-divider b-example-vr"></div> -->
-        <div id="dashboard-content scrollarea container-fluid">
-            <div class="display-1">Add New Subject</div>
-            <div class="container">
+        <div class="dashboard-content container-fluid">
+            <div class="display-4">Add New Subject</div>
+            <div class="container-fluid">
                 <!-- onsubmit="return validateRegistration()" -->
                 <form action="./services/registerSub.php" method="POST" class="form-signup">
-                    <input type="text" id="subject-code" class="form-control" placeholder="Subject Code" required="" autofocus="" name="subjectcode">
-                    <input type="text" id="sub-name" class="form-control" placeholder="Subject Name" required="" autofocus="" name="subjectname">
-                    <select class="form-select" aria-label="Default select example" name="subtype">
-                        <option disabled>Select Type</option>
-                        <option value="THEORY">theory</option>
-                        <option value="LAB">lab</option>
-                        <!-- <option value="2">Two</option>
+                    <div class="mt-4 mb-3">
+                        <label for="subjectcode" class="form-label">Subject Code</label>
+                        <input type="text" id="subject-code" class="form-control" placeholder="Subject Code" required="" autofocus="" name="subjectcode">
+                    </div>
+                    <div class="mb-3">
+                        <label for="subjectname" class="form-label">Subject Name</label>
+                        <input type="text" id="sub-name" class="form-control" placeholder="Subject Name" required="" autofocus="" name="subjectname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="subjecttype" class="form-label">Subject Type</label>
+                        <select class="form-select" aria-label="Default select example" name="subtype">
+                            <option disabled>Select Type</option>
+                            <option value="THEORY">theory</option>
+                            <option value="LAB">lab</option>
+                            <!-- <option value="2">Two</option>
                         <option value="3">Three</option> -->
-                    </select>
-                    <input type="number" id="semester" class="form-control" placeholder="semester" required autofocus="" name="semester">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="semester" class="form-label">Semester</label>
+                        <input type="number" id="semester" class="form-control" placeholder="semester" required autofocus="" name="semester">
+                    </div>
+
                     <!-- <input type="text" id="qualification" class="form-control" placeholder="Qualification" required autofocus="" name="qualification">
                     <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
                     <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="password"> -->
@@ -274,35 +280,39 @@ if ($_SESSION["userloggedin"] == 1) {
                 </form>
 
             </div>
-            <table id="subjectstable">
-                <caption><strong>Subject Information </strong></caption>
-                <tr>
-                    <th width="130">Subject Code</th>
-                    <th width=290>Name</th>
-                    <th width="190">Type</th>
-                    <th width="190">Semester</th>
-                    <!-- <th width="290">Email ID</th>
+            <hr>
+            <div class="container-fluid">
+                <h3><strong>Subject Information </strong></h3>
+                <table id="subjectstable" class="table table-bordered">
+                    <tr>
+                        <th width="130">Subject Code</th>
+                        <th width=290>Name</th>
+                        <th width="190">Type</th>
+                        <th width="190">Semester</th>
+                        <th width="190">Action</th>
+                        <!-- <th width="290">Email ID</th>
                 <th width="40">Action</th> -->
-                </tr>
-                <tbody>
-                    <?php
-                    $q = mysqli_query(
-                        mysqli_connect("localhost", "root", "root", "Dev"),
-                        "SELECT * FROM subjects ORDER BY course_type ASC"
-                    );
+                    </tr>
+                    <tbody>
+                        <?php
+                        $q = mysqli_query(
+                            mysqli_connect("localhost", "root", "root", "Dev"),
+                            "SELECT * FROM subjects ORDER BY course_type ASC"
+                        );
 
-                    while ($row = mysqli_fetch_assoc($q)) {
-                        echo "<tr><td>{$row['subject_code']}</td>
+                        while ($row = mysqli_fetch_assoc($q)) {
+                            echo "<tr><td>{$row['subject_code']}</td>
                 <td>{$row['subject_name']}</td>
                 <td>{$row['course_type']}</td>
                 <td>{$row['semester']}</td>
-               <td><button>Delete</button></td>
+               <td><button class='btn btn-danger'>Delete</button></td>
                 </tr>\n";
-                    }
-                    // echo "<script>deleteHandlers();</script>";
-                    ?>
-                </tbody>
-            </table>
+                        }
+                        // echo "<script>deleteHandlers();</script>";
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
     <script src="./js/sidebars.js"></script>

@@ -244,75 +244,58 @@ if ($_SESSION["userloggedin"] == 1) {
         </div>
         <!-- <div class="b-example-divider b-example-vr"></div> -->
         <div class="dashboard-content container-fluid">
-            <div class="display-4">Add New Staff</div>
+            <div class="dashboard-heading display-4">Add New Batch</div>
             <div class="container-fluid">
-                <!-- onsubmit="return validateRegistration()" -->
-                <form action="./services/registerStaff.php" method="POST" class="form-signup">
-                    <div class="mt-4 mb-3">
-                        <label for="name" class="form-label">Name of Staff</label>
-                        <input type="text" id="user-name" class="form-control" placeholder="Full name" required="" autofocus="" name="fullname">
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Staff Phone Number</label>
-                        <input type="number" id="user-phone" class="form-control" placeholder="Phone Number" required="" autofocus="" name="phone">
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Staff Email Id</label>
-                        <input type="email" id="user-email" class="form-control" placeholder="Email address" required autofocus="" name="email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="empid" class="form-label">Staff Employee Id</label>
-                        <input type="text" id="staff-id" class="form-control" placeholder="Staff ID" required autofocus="" name="staffID">
-                    </div>
-                    <div class="mb-3">
-                        <label for="qualification" class="form-label">Staff Qualification</label>
-                        <input type="text" id="qualification" class="form-control" placeholder="Qualification" required autofocus="" name="qualification">
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
-                    </div>
-                    <div class="mb-3">
-                        <label for="rpassword" class="form-label">Retype Password</label>
-                        <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="password">
-                    </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <!-- <input type="number" id="semester" class="form-control" placeholder="semester" required autofocus="" name="semester"> -->
-                    <!-- <input type="text" id="qualification" class="form-control" placeholder="Qualification" required autofocus="" name="qualification">
-                    <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
-                    <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="password"> -->
+                <!-- onsubmit="return validateRegistration()" -->
+                <form action="./services/registerBatch.php" method="POST" class="form-signup">
+                    <div class="mt-4 mb-3">
+                        <label for="batch" class="form-label">Name</label>
+                        <input type="text" id="batch-name" class="form-control" placeholder="Name of Batch" required="" autofocus="" name="batch">
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Select Year</label>
+                        <select class="form-select" aria-label="Default select example" name="year" onchange="fetch_updatedata(this.value)">
+                            <option selected disabled>Select Year</option>
+                            <option value="2">Second Year</option>
+                            <!-- <option value="2">Two</option>
+                            <option value="3">Three</option> -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="division" class="form-label">Select Division to associate</label>
+                        <select id="divisionselection" class="form-select" name="division">
+                            <option selected disabled>Division</option>
+                            <!-- <option value="2">Two</option>
+                        <option value="3">Three</option> -->
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>
                 </form>
             </div>
             <hr>
             <div class="container-fluid">
-                <h3><strong>Staff Information </strong></h3>
-                <table id="stafftable" class="table table-bordered">
+                <h3><strong>Batches Information </strong></h3>
+                <table id="batchestable" class="table table-bordered">
                     <tr>
-                        <th width="130">StaffId</th>
-                        <th width=290>Name</th>
-                        <th width="190">qualification</th>
-                        <th width="190">Contact No.</th>
-                        <th width="290">Email ID</th>
-                        <th width="40">Action</th>
+                        <th width="130">Name</th>
+                        <th width=290>Division</th>
+                        <th width=190>Year</th>
                     </tr>
                     <tbody>
                         <?php
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM staff ORDER BY staffId ASC"
+                            "SELECT * FROM batches ORDER BY year,name ASC"
                         );
 
                         while ($row = mysqli_fetch_assoc($q)) {
-                            echo "<tr><td>{$row['staffId']}</td>
-                    <td>{$row['name']}</td>
-                    <td>{$row['qualification']}</td>
-                    <td>{$row['phone']}</td>
-                    <td>{$row['emailId']}</td>
+                            echo "<tr><td>{$row['name']}</td>
+                    <td>{$row['division']}</td>
+                    <td>{$row['year']}</td>
                    <td><button class='btn btn-danger'>Delete</button></td>
                     </tr>\n";
                         }
-                        // echo "<script>deleteHandlers();</script>";
                         ?>
                     </tbody>
                 </table>
@@ -321,5 +304,28 @@ if ($_SESSION["userloggedin"] == 1) {
     </main>
     <script src="./js/sidebars.js"></script>
 </body>
+<script>
+    function fetch_updatedata(e) {
+        var xhr1 = new XMLHttpRequest();
+
+        // Define the type of request, the URL, and if it's asynchronous
+        xhr1.open("POST", "/TimeTableGenerator/services/fetch_updatedata.php", true);
+
+        // Set the request header to indicate the content type for POST
+        xhr1.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        // Handle the response from the PHP file
+        xhr1.onreadystatechange = function() {
+            if (xhr1.readyState == 4 && xhr1.status == 200) {
+                // Update the div with the response from the PHP file
+                document.getElementById('divisionselection').innerHTML = xhr1.responseText;
+            }
+        };
+
+        // Send the selected value as POST data
+        xhr1.send("year=" + e + "&data=divisions");
+
+    }
+</script>
 
 </html>

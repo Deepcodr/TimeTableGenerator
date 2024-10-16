@@ -165,7 +165,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/generate.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#grid" />
                         </svg>
@@ -173,27 +173,11 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/associate.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#people-circle" />
                         </svg>
                         Associate Staff
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Divisions
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Labs
                     </a>
                 </li>
                 <li>
@@ -210,6 +194,14 @@ if ($_SESSION["userloggedin"] == 1) {
                             <use xlink:href="#people-circle" />
                         </svg>
                         Add Divisions
+                    </a>
+                </li>
+                <li>
+                    <a href="/TimeTableGenerator/addBatches.php" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#people-circle" />
+                        </svg>
+                        Add Batches
                     </a>
                 </li>
                 <li>
@@ -251,44 +243,54 @@ if ($_SESSION["userloggedin"] == 1) {
             </div>
         </div>
         <!-- <div class="b-example-divider b-example-vr"></div> -->
-        <div id="content container-fluid my-auto" style="width: 80vw;">
-            <div class="display-1">Add New Division</div>
-            <div class="container" style="width: 18rem;">
+        <div class="dashboard-content container-fluid">
+            <div class="dashboard-heading display-4">Add New Division</div>
+            <div class="container-fluid">
+
                 <!-- onsubmit="return validateRegistration()" -->
                 <form action="./services/registerDiv.php" method="POST" class="form-signup">
-                    <input type="text" id="division-name" class="form-control" placeholder="Division" required="" autofocus="" name="division">
-                    <select class="form-select" aria-label="Default select example" name="year">
-                        <option disabled>Select Year</option>
-                        <option value="2">Second Year</option>
-                        <!-- <option value="2">Two</option>
-                        <option value="3">Three</option> -->
-                    </select>
+                    <div class="mt-4 mb-3">
+                        <label for="division" class="form-label">Division</label>
+                        <input type="text" id="division-name" class="form-control" placeholder="Division" required="" autofocus="" name="division">
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Select Year</label>
+                        <select class="form-select" aria-label="Default select example" name="year">
+                            <option disabled>Select Year</option>
+                            <option value="2">Second Year</option>
+                            <!-- <option value="2">Two</option>
+                            <option value="3">Three</option> -->
+                        </select>
+                    </div>
                     <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>
                 </form>
             </div>
-            <table id="divisiontable" style="margin-left: 80px">
-                <caption><strong>Division Information </strong></caption>
-                <tr>
-                    <th width="130">Name</th>
-                    <th width=290>Year</th>
-                </tr>
-                <tbody>
-                    <?php
-                    $q = mysqli_query(
-                        mysqli_connect("localhost", "root", "root", "Dev"),
-                        "SELECT * FROM divisions ORDER BY year ASC"
-                    );
+            <hr>
+            <div class="container-fluid">
+                <h3><strong>Division Information </strong></h3>
+                <table id="divisiontable" class="table table-bordered">
+                    <tr>
+                        <th width="130">Name</th>
+                        <th width=290>Year</th>
+                        <th width=190>Action</th>
+                    </tr>
+                    <tbody>
+                        <?php
+                        $q = mysqli_query(
+                            mysqli_connect("localhost", "root", "root", "Dev"),
+                            "SELECT * FROM divisions ORDER BY year ASC"
+                        );
 
-                    while ($row = mysqli_fetch_assoc($q)) {
-                        echo "<tr><td>{$row['name']}</td>
+                        while ($row = mysqli_fetch_assoc($q)) {
+                            echo "<tr><td>{$row['name']}</td>
                     <td>{$row['year']}</td>
-                   <td><button>Delete</button></td>
+                   <td><button class='btn btn-danger'>Delete</button></td>
                     </tr>\n";
-                    }
-                    // echo "<script>deleteHandlers();</script>";
-                    ?>
-                </tbody>
-            </table>
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
     <script src="./js/sidebars.js"></script>

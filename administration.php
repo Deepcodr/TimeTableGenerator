@@ -107,9 +107,6 @@ if ($_SESSION["userloggedin"] == 1) {
     }
   </style>
 
-
-  <!-- Custom styles for this template -->
-  <link href="sidebars.css" rel="stylesheet">
 </head>
 
 <body>
@@ -165,7 +162,7 @@ if ($_SESSION["userloggedin"] == 1) {
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link text-white">
+          <a href="/TimeTableGenerator/generate.php" class="nav-link text-white">
             <svg class="bi pe-none me-2" width="16" height="16">
               <use xlink:href="#grid" />
             </svg>
@@ -178,22 +175,6 @@ if ($_SESSION["userloggedin"] == 1) {
               <use xlink:href="#people-circle" />
             </svg>
             Associate Staff
-          </a>
-        </li>
-        <li>
-          <a href="/TimeTableGenerator/associate.php" class="nav-link text-white">
-            <svg class="bi pe-none me-2" width="16" height="16">
-              <use xlink:href="#people-circle" />
-            </svg>
-            Associate Divisions
-          </a>
-        </li>
-        <li>
-          <a href="/TimeTableGenerator/associate.php" class="nav-link text-white">
-            <svg class="bi pe-none me-2" width="16" height="16">
-              <use xlink:href="#people-circle" />
-            </svg>
-            Associate Labs
           </a>
         </li>
         <li>
@@ -210,6 +191,14 @@ if ($_SESSION["userloggedin"] == 1) {
               <use xlink:href="#people-circle" />
             </svg>
             Add Divisions
+          </a>
+        </li>
+        <li>
+          <a href="/TimeTableGenerator/addBatches.php" class="nav-link text-white">
+            <svg class="bi pe-none me-2" width="16" height="16">
+              <use xlink:href="#people-circle" />
+            </svg>
+            Add Batches
           </a>
         </li>
         <li>
@@ -250,7 +239,9 @@ if ($_SESSION["userloggedin"] == 1) {
         </ul>
       </div>
     </div>
-    <!-- <div class="b-example-divider b-example-vr"></div> -->
+    <div class="container-fluid">
+      
+    </div>
   </main>
   <script src="./js/sidebars.js"></script>
 </body>

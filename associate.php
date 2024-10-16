@@ -174,27 +174,11 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/associate.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#people-circle" />
                         </svg>
                         Associate Staff
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Divisions
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Labs
                     </a>
                 </li>
                 <li>
@@ -211,6 +195,14 @@ if ($_SESSION["userloggedin"] == 1) {
                             <use xlink:href="#people-circle" />
                         </svg>
                         Add Divisions
+                    </a>
+                </li>
+                <li>
+                    <a href="/TimeTableGenerator/addBatches.php" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#people-circle" />
+                        </svg>
+                        Add Batches
                     </a>
                 </li>
                 <li>
@@ -252,85 +244,101 @@ if ($_SESSION["userloggedin"] == 1) {
             </div>
         </div>
         <!-- <div class="b-example-divider b-example-vr"></div> -->
-        <div id="dashboard-content scrollarea container-fluid">
-            <div class="display-1">New Association</div>
-            <div class="container">
+        <div class="dashboard-content container-fluid">
+            <div class="dashboard-heading display-4">Add New Association</div>
+            <div class="container-fluid">
                 <!-- onsubmit="return validateRegistration()" -->
                 <form action="./services/associateData.php" method="POST" class="form-signup">
-                    <select name="staff" class="form-control">
-                        <?php
-                        $q = mysqli_query(
-                            mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM staff"
-                        );
-                        $row_count = mysqli_num_rows($q);
-                        if ($row_count) {
-                            $mystring = '
-         <option selected disabled>Select Staff</option>';
-                            while ($row = mysqli_fetch_assoc($q)) {
-                                $mystring .= '<option value="' . $row['staffId'] . '">' . "(" . $row['staffId'] . ")  " . $row['name'] . '</option>';
-                            }
+                    <div class="mt-4 mb-3">
+                        <label for="staff" class="form-label">Select Staff to associate</label>
+                        <select name="staff" class="form-select">
+                            <?php
+                            $q = mysqli_query(
+                                mysqli_connect("localhost", "root", "root", "Dev"),
+                                "SELECT * FROM staff"
+                            );
+                            $row_count = mysqli_num_rows($q);
+                            if ($row_count) {
+                                $mystring = '
+                                    <option selected disabled>Staff</option>';
+                                while ($row = mysqli_fetch_assoc($q)) {
+                                    $mystring .= '<option value="' . $row['staffId'] . '">' . "(" . $row['staffId'] . ")  " . $row['name'] . '</option>';
+                                }
 
-                            echo $mystring;
-                        }
-                        ?>
-                    </select>
-                    <select class="form-select" aria-label="Default select example" name="year" onchange="fetch_updatedata(this.value)">
-                        <option selected disabled>Select Year</option>
-                        <option value="2">2</option>
-                        <!-- <option value="LAB">lab</option> -->
-                        <!-- <option value="2">Two</option>
+                                echo $mystring;
+                            }
+                            ?>
+                        </select>
+                        <div id="emailHelp" class="form-text">Assign Staff according to availability & lecture count per head</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Select Year</label>
+                        <select class="form-select" name="year" onchange="fetch_updatedata(this.value)">
+                            <option selected disabled>Year</option>
+                            <option value="2">2</option>
+                            <!-- <option value="LAB">lab</option> -->
+                            <!-- <option value="2">Two</option>
                         <option value="3">Three</option> -->
-                    </select>
-                    <select id="subjectselection" name="subject" class="form-control">
-                        <option selected disabled>Select Subject</option>
-                    </select>
-                    <select id="divisionselection" class="form-select" aria-label="Default select example" name="division">
-                        <option selected disabled>Select Division</option>
-                        <!-- <option value="2">Two</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Select Subject to associate</label>
+                        <select id="subjectselection" name="subject" class="form-select">
+                            <option selected disabled>Subject</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="division" class="form-label">Select Division to associate</label>
+                        <select id="divisionselection" class="form-select" name="division">
+                            <option selected disabled>Division</option>
+                            <!-- <option value="2">Two</option>
                         <option value="3">Three</option> -->
-                    </select>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                     <!-- <input type="number" id="semester" class="form-control" placeholder="semester" required autofocus="" name="semester"> -->
                     <!-- <input type="text" id="qualification" class="form-control" placeholder="Qualification" required autofocus="" name="qualification">
                     <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
                     <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="password"> -->
-
-                    <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>
                 </form>
             </div>
-            <table id="associationTable">
-                <caption><strong>Association Information </strong></caption>
-                <tr>
-                    <th width="130">Staff Name</th>
-                    <th width="130">Staff ID</th>
-                    <th width="130">Subject Code</th>
-                    <th width=290>Subject Name</th>
-                    <th width="190">Division</th>
-                    <th width="190">Year</th>
-                    <!-- <th width="290">Email ID</th>
-                <th width="40">Action</th> -->
-                </tr>
-                <tbody>
-                    <?php
-                    $q = mysqli_query(
-                        mysqli_connect("localhost", "root", "root", "Dev"),
-                        "SELECT * FROM associations ORDER BY division ASC"
-                    );
+            <hr>
+            <div class="container-fluid">
+                <h3><strong>Association Information </strong></h3>
+                <table id="associationTable" class="table table-bordered">
+                    <tr>
+                        <th width="130">Staff Name</th>
+                        <th width="130">Staff ID</th>
+                        <th width="130">Subject Code</th>
+                        <th width=290>Subject Name</th>
+                        <th width="190">Division</th>
+                        <th width="190">Year</th>
+                        <th width="190">action</th>
+                        <!-- <th width="290">Email ID</th>
+                    <th width="40">Action</th> -->
+                    </tr>
+                    <tbody>
+                        <?php
+                        $q = mysqli_query(
+                            mysqli_connect("localhost", "root", "root", "Dev"),
+                            "SELECT * FROM associations ORDER BY division ASC"
+                        );
 
-                    while ($row = mysqli_fetch_assoc($q)) {
-                        echo "<tr><td>{$row['staffname']}</td>
-                        <td>{$row['staffid']}</td>
-                <td>{$row['subjectcode']}</td>
-                <td>{$row['subjectname']}</td>
-                <td>{$row['division']}</td>
-                <td>{$row['year']}</td>
-               <td><button>Delete</button></td>
-                </tr>\n";
-                    }
-                    // echo "<script>deleteHandlers();</script>";
-                    ?>
-                </tbody>
-            </table>
+                        while ($row = mysqli_fetch_assoc($q)) {
+                            echo "<tr><td>{$row['staffname']}</td>
+                            <td>{$row['staffid']}</td>
+                    <td>{$row['subjectcode']}</td>
+                    <td>{$row['subjectname']}</td>
+                    <td>{$row['division']}</td>
+                    <td>{$row['year']}</td>
+                   <td><button class='btn btn-danger'>Delete</button></td>
+                    </tr>\n";
+                        }
+                        // echo "<script>deleteHandlers();</script>";
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
     <script src="./js/sidebars.js"></script>
