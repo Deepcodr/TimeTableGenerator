@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 06, 2024 at 10:48 AM
+-- Generation Time: Oct 18, 2024 at 03:48 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -75,7 +75,44 @@ INSERT INTO `associations` (`staffid`, `staffname`, `subjectcode`, `subjectname`
 ('T10', 'A.V.Gundavade', 'TK04', 'DMS', 2, 'B', 10),
 ('T11', 'R.Y.Kumbhar', 'TK05', 'OOP', 2, 'B', 11),
 ('T12', 'S.D.Mule', 'TK08', 'M&E', 2, 'B', 12),
-('T07', 'Santhosh Desai', 'TK01', 'Engineering Maths', 2, 'B', 13);
+('T07', 'Santhosh Desai', 'TK01', 'Engineering Maths', 2, 'B', 13),
+('T05', 'S.V.Nikam', 'TK02', 'Data Structures & Algorithms', 2, 'C', 14),
+('T09', 'P.P.Shirgaonkar', 'TK07', 'DSMP', 2, 'C', 15),
+('T13', 'P.V.Nalawade', 'TK06', 'SE', 2, 'C', 16),
+('T12', 'S.D.Mule', 'TK04', 'DMS', 2, 'C', 17),
+('T14', 'M.S.Bhosale', 'TK05', 'OOP', 2, 'C', 18),
+('T02', 'Savitha M', 'TK08', 'M&E', 2, 'C', 19),
+('T07', 'Santhosh Desai', 'TK01', 'Engineering Maths', 2, 'C', 20);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `batches`
+--
+
+CREATE TABLE `batches` (
+  `id` int(11) NOT NULL,
+  `name` varchar(2) NOT NULL,
+  `division` varchar(2) NOT NULL,
+  `year` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `batches`
+--
+
+INSERT INTO `batches` (`id`, `name`, `division`, `year`) VALUES
+(1, 'A1', 'A', 2),
+(2, 'A2', 'A', 2),
+(3, 'A3', 'A', 2),
+(4, 'A4', 'A', 2),
+(5, 'B1', 'B', 2),
+(6, 'B2', 'B', 2),
+(7, 'B3', 'B', 2),
+(8, 'B4', 'B', 2),
+(9, 'C1', 'C', 2),
+(10, 'C2', 'C', 2),
+(11, 'C3', 'C', 2);
 
 -- --------------------------------------------------------
 
@@ -85,17 +122,18 @@ INSERT INTO `associations` (`staffid`, `staffname`, `subjectcode`, `subjectname`
 
 CREATE TABLE `divisions` (
   `name` varchar(2) NOT NULL,
-  `year` int(1) NOT NULL
+  `year` int(1) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `divisions`
 --
 
-INSERT INTO `divisions` (`name`, `year`) VALUES
-('A', 2),
-('B', 2),
-('C', 2);
+INSERT INTO `divisions` (`name`, `year`, `id`) VALUES
+('A', 2, 1),
+('B', 2, 2),
+('C', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -128,7 +166,9 @@ INSERT INTO `staff` (`name`, `staffId`, `qualification`, `emailId`, `password`, 
 ('P.P.Shirgaonkar', 'T09', 'M.tech', 'pps@tkiet.com', 'pps123', '1234'),
 ('A.V.Gundavade', 'T10', 'M.tech', 'avg@tkiet.com', 'avg123', '1234'),
 ('R.Y.Kumbhar', 'T11', 'M.tech', 'ryk@tkiet.com', 'ryk123', '1234'),
-('S.D.Mule', 'T12', 'M.tech', 'sdm@tkiet.com', 'sdm123', '1234');
+('S.D.Mule', 'T12', 'M.tech', 'sdm@tkiet.com', 'sdm123', '1234'),
+('P.V.Nalawade', 'T13', 'M.tech', 'pvn@tkiet.com', 'pvn123', '1234'),
+('M.S.Bhosale', 'T14', 'M.Tech', 'msb@tkiet.com', 'msb123', '1234');
 
 -- --------------------------------------------------------
 
@@ -159,49 +199,24 @@ INSERT INTO `students` (`username`, `phone`, `email`, `password`, `name`) VALUES
 
 CREATE TABLE `subjects` (
   `subject_code` varchar(10) NOT NULL,
-  `subject_name` varchar(50) NOT NULL,
+  `subject_alias` varchar(50) NOT NULL,
+  `subject_name` varchar(200) NOT NULL,
   `course_type` varchar(15) NOT NULL,
-  `semester` int(1) NOT NULL,
-  `isAlloted` int(1) NOT NULL,
-  `allotedto` text DEFAULT NULL,
-  `allotedto2` text DEFAULT NULL,
-  `allotedto3` text DEFAULT NULL
+  `semester` int(1) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `subjects`
 --
 
-INSERT INTO `subjects` (`subject_code`, `subject_name`, `course_type`, `semester`, `isAlloted`, `allotedto`, `allotedto2`, `allotedto3`) VALUES
-('CO445', 'Network Security', 'THEORY', 7, 1, 'T011', 'T008', ''),
-('CO451', 'Computer Network Design', 'THEORY', 7, 1, 'T003', '', ''),
-('CO494', 'Embedded  Systems Lab', 'LAB', 7, 1, 'T008', 'T001', 'T004'),
-('CO493', 'Networking Lab', 'LAB', 7, 1, 'T002', 'T007', 'T011'),
-('CO394', 'Minor Project', 'LAB', 5, 1, 'T005', 'T007', 'T003'),
-('CO393', 'Software Lab I', 'LAB', 5, 1, 'T003', 'T013', 'T005'),
-('CO292', ' Data Structures Lab', 'LAB', 3, 1, 'T003', 'T012', 'T013'),
-('CO293', 'Programming Lab', 'LAB', 3, 1, 'T006', 'T009', 'T008'),
-('CO431', 'Internet Tools', 'THEORY', 7, 1, 'T005', '', ''),
-('CO406', 'Compiler Design', 'THEORY', 7, 1, 'T003', '', ''),
-('CO206', 'Logic Theory & Computer Organisation', 'THEORY', 3, 1, 'T002', '', ''),
-('EL211', 'Electronic Devices & Circuits', 'THEORY', 3, 1, 'T014', '', ''),
-('AM261', 'Higher Mathematics', 'THEORY', 3, 1, 'T016', '', ''),
-('CO207', 'Data Structures & Algorithm', 'THEORY', 3, 1, 'T003', '', ''),
-('CO309', 'Microprocessor Theory & Applications', 'THEORY', 5, 1, 'T011', '', ''),
-('EL340', 'Communication Engineering', 'THEORY', 5, 1, 'T014', '', ''),
-('CO308', 'Digital Electronics', 'THEORY', 5, 1, 'T008', '', ''),
-('CO310', 'Operating Systems', 'THEORY', 5, 1, 'T013', '', ''),
-('ME340', 'Economics & Management', 'THEORY', 5, 1, 'T015', '', ''),
-('CO448', 'Embedded Systems', 'THEORY', 7, 1, 'T010', '', ''),
-('CO460', 'Computer Architecture', 'THEORY', 7, 1, 'T009', '', ''),
-('CO203', 'Object Oriented Programming', 'THEORY', 3, 1, 'T006', '', ''),
-('TK01', 'Engineering Maths', 'THEORY', 2, 0, NULL, NULL, NULL),
-('TK02', 'Data Structures & Algorithms', 'THEORY', 2, 0, NULL, NULL, NULL),
-('TK04', 'DMS', 'THEORY', 2, 0, NULL, NULL, NULL),
-('TK05', 'OOP', 'THEORY', 2, 0, NULL, NULL, NULL),
-('TK06', 'SE', 'THEORY', 2, 0, NULL, NULL, NULL),
-('TK07', 'DSMP', 'THEORY', 2, 0, NULL, NULL, NULL),
-('TK08', 'M&E', 'THEORY', 2, 0, NULL, NULL, NULL);
+INSERT INTO `subjects` (`subject_code`, `subject_alias`, `subject_name`, `course_type`, `semester`) VALUES
+('TK01', 'Maths', 'Mathematics For Computer Science', 'THEORY', 2),
+('TK02', 'DS', 'Data Structures', 'THEORY', 2),
+('TK04', 'DMS', 'Discrete Mathematical Structure', 'THEORY', 2),
+('TK05', 'OOP', 'Object Oriented Programming', 'THEORY', 2),
+('TK06', 'SE', 'Software Engineering', 'THEORY', 2),
+('TK07', 'DSMP', 'Digital Systems and Microprocessors', 'THEORY', 2),
+('TK08', 'M&E', 'Management and Enterpreneurship', 'THEORY', 2);
 
 --
 -- Indexes for dumped tables
@@ -219,6 +234,18 @@ ALTER TABLE `admin`
 -- Indexes for table `associations`
 --
 ALTER TABLE `associations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `batches`
+--
+ALTER TABLE `batches`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `divisions`
+--
+ALTER TABLE `divisions`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -249,7 +276,19 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `associations`
 --
 ALTER TABLE `associations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `batches`
+--
+ALTER TABLE `batches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `divisions`
+--
+ALTER TABLE `divisions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
