@@ -181,6 +181,14 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
+                    <a href="/TimeTableGenerator/associateLabs.php" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#people-circle" />
+                        </svg>
+                        Associate Labs
+                    </a>
+                </li>
+                <li>
                     <a href="/TimeTableGenerator/addStaff.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#people-circle" />
@@ -293,7 +301,7 @@ if ($_SESSION["userloggedin"] == 1) {
                             echo "<tr><td>{$row['name']}</td>
                     <td>{$row['division']}</td>
                     <td>{$row['year']}</td>
-                   <td><button class='btn btn-danger'>Delete</button></td>
+                   <td><a class='btn btn-danger' href='./services/handleDelete.php?query=batch&batchid={$row['id']}'>Delete</a></td>
                     </tr>\n";
                         }
                         ?>

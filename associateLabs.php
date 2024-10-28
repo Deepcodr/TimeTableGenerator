@@ -253,10 +253,10 @@ if ($_SESSION["userloggedin"] == 1) {
         </div>
         <!-- <div class="b-example-divider b-example-vr"></div> -->
         <div class="dashboard-content container-fluid">
-            <div class="dashboard-heading display-4">Add New Association</div>
+            <div class="dashboard-heading display-4">Associate Labs</div>
             <div class="container-fluid">
                 <!-- onsubmit="return validateRegistration()" -->
-                <form action="./services/associateData.php" method="POST" class="form-signup">
+                <form action="./services/associateBatches.php" method="POST" class="form-signup">
                     <div class="mt-4 mb-3">
                         <label for="staff" class="form-label">Select Staff to associate</label>
                         <select name="staff" class="form-select">
@@ -281,7 +281,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Select Year</label>
-                        <select class="form-select" name="year" onchange="fetch_updatedata(this.value)">
+                        <select id="year" class="form-select" name="year" onchange="fetch_updatedata(this.value)">
                             <option selected disabled>Year</option>
                             <option value="2">2</option>
                             <!-- <option value="LAB">lab</option> -->
@@ -290,15 +290,23 @@ if ($_SESSION["userloggedin"] == 1) {
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="subject" class="form-label">Select Subject to associate</label>
+                        <label for="subject" class="form-label">Select Lab Subject to associate</label>
                         <select id="subjectselection" name="subject" class="form-select">
                             <option selected disabled>Subject</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="division" class="form-label">Select Division to associate</label>
-                        <select id="divisionselection" class="form-select" name="division">
+                        <select id="divisionselection" class="form-select" name="division" onchange="fetch_batches(this.value)">
                             <option selected disabled>Division</option>
+                            <!-- <option value="2">Two</option>
+                        <option value="3">Three</option> -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="batch" class="form-label">Select Batch to associate</label>
+                        <select id="batchselection" class="form-select" name="batch">
+                            <option selected disabled>Batch</option>
                             <!-- <option value="2">Two</option>
                         <option value="3">Three</option> -->
                         </select>
@@ -312,15 +320,16 @@ if ($_SESSION["userloggedin"] == 1) {
             </div>
             <hr>
             <div class="container-fluid">
-                <h3><strong>Association Information </strong></h3>
-                <table id="associationTable" class="table table-bordered">
+                <h3><strong>Lab Association Information </strong></h3>
+                <table id="batchesTable" class="table table-bordered">
                     <tr>
-                        <th width="130">Staff Name</th>
+                        <th width="190">Year</th>
+                        <th width="190">Division</th>
+                        <th width="130">Batch Name</th>
                         <th width="130">Staff ID</th>
+                        <th width="130">Staff Name</th>
                         <th width="130">Subject Code</th>
                         <th width=290>Subject Name</th>
-                        <th width="190">Division</th>
-                        <th width="190">Year</th>
                         <th width="190">action</th>
                         <!-- <th width="290">Email ID</th>
                     <th width="40">Action</th> -->
@@ -329,17 +338,18 @@ if ($_SESSION["userloggedin"] == 1) {
                         <?php
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM associations ORDER BY division ASC"
+                            "SELECT * FROM batch_associations ORDER BY division and batchname ASC"
                         );
 
                         while ($row = mysqli_fetch_assoc($q)) {
-                            echo "<tr><td>{$row['staffname']}</td>
+                            echo "<tr><td>{$row['year']}</td>
+                            <td>{$row['division']}</td>
+                            <td>{$row['batchname']}</td>
                             <td>{$row['staffid']}</td>
+                            <td>{$row['staffname']}</td>
                     <td>{$row['subjectcode']}</td>
                     <td>{$row['subjectname']}</td>
-                    <td>{$row['division']}</td>
-                    <td>{$row['year']}</td>
-                   <td><a class='btn btn-danger' href='./services/handleDelete.php?query=staffassoc&staffassocid={$row['id']}'>Delete</a></td>
+                   <td><a class='btn btn-danger' href='./services/handleDelete.php?query=batchassoc&batchassocid={$row['id']}'>Delete</a></td>
                     </tr>\n";
                         }
                         // echo "<script>deleteHandlers();</script>";
@@ -370,7 +380,7 @@ if ($_SESSION["userloggedin"] == 1) {
         };
 
         // Send the selected value as POST data
-        xhr.send("year=" + e + "&data=subjects&type=THEORY");
+        xhr.send("year=" + e + "&data=subjects&type=LAB");
 
         var xhr1 = new XMLHttpRequest();
 
@@ -390,7 +400,30 @@ if ($_SESSION["userloggedin"] == 1) {
 
         // Send the selected value as POST data
         xhr1.send("year=" + e + "&data=divisions");
+    }
 
+    function fetch_batches(e){
+        var year=document.getElementById('year').value;
+        var xhr2 = new XMLHttpRequest();
+
+        // Define the type of request, the URL, and if it's asynchronous
+        xhr2.open("POST", "/TimeTableGenerator/services/fetch_updatedata.php", true);
+
+        // Set the request header to indicate the content type for POST
+        xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        // Handle the response from the PHP file
+        xhr2.onreadystatechange = function() {
+            if (xhr2.readyState == 4 && xhr2.status == 200) {
+                // Update the div with the response from the PHP file
+                document.getElementById('batchselection').innerHTML = xhr2.responseText;
+            }
+        };
+
+        // Send the selected value as POST data
+        // var division = document.getElementById('divisionselection').value;
+        // console.log(division);
+        xhr2.send("year=" + year + "&data=batches&division="+e);
     }
 </script>
 

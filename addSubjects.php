@@ -182,6 +182,14 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
+                    <a href="/TimeTableGenerator/associateLabs.php" class="nav-link text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#people-circle" />
+                        </svg>
+                        Associate Labs
+                    </a>
+                </li>
+                <li>
                     <a href="/TimeTableGenerator/addStaff.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#people-circle" />
@@ -258,6 +266,10 @@ if ($_SESSION["userloggedin"] == 1) {
                         <input type="text" id="sub-name" class="form-control" placeholder="Subject Name" required="" autofocus="" name="subjectname">
                     </div>
                     <div class="mb-3">
+                        <label for="subjectalias" class="form-label">Subject Alias</label>
+                        <input type="text" id="sub-alias" class="form-control" placeholder="Subject Short Name" required="" autofocus="" name="subalias">
+                    </div>
+                    <div class="mb-3">
                         <label for="subjecttype" class="form-label">Subject Type</label>
                         <select class="form-select" aria-label="Default select example" name="subtype">
                             <option disabled>Select Type</option>
@@ -287,6 +299,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     <tr>
                         <th width="130">Subject Code</th>
                         <th width=290>Name</th>
+                        <th width=290>Subject Alias</th>
                         <th width="190">Type</th>
                         <th width="190">Semester</th>
                         <th width="190">Action</th>
@@ -297,15 +310,16 @@ if ($_SESSION["userloggedin"] == 1) {
                         <?php
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM subjects ORDER BY course_type ASC"
+                            "SELECT * FROM subjects ORDER BY subject_code ASC"
                         );
 
                         while ($row = mysqli_fetch_assoc($q)) {
                             echo "<tr><td>{$row['subject_code']}</td>
                 <td>{$row['subject_name']}</td>
+                <td>{$row['subject_alias']}</td>
                 <td>{$row['course_type']}</td>
                 <td>{$row['semester']}</td>
-               <td><button class='btn btn-danger'>Delete</button></td>
+               <td><a class='btn btn-danger' href='./services/handleDelete.php?query=subject&subcode={$row['subject_code']}'>Delete</a></td>
                 </tr>\n";
                         }
                         // echo "<script>deleteHandlers();</script>";

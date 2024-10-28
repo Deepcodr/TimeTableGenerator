@@ -9,13 +9,13 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     $subcode=$_REQUEST['subjectcode'];
     $subtype=$_REQUEST['subtype'];
     $semester=$_REQUEST['semester'];
-    $alloted=0;
+    $subalias=$_REQUEST['subalias'];
     // $staffId=$_REQUEST['staffID'];
     // $qual = $_REQUEST['qualification'];
 
     try{
-        $sql=mysqli_prepare($conn,"INSERT INTO subjects(subject_code,subject_name,course_type,semester,isalloted) VALUES (?,?,?,?,?)");
-        $sql->bind_param("sssii",$subcode,$subname,$subtype,$semester,$alloted);
+        $sql=mysqli_prepare($conn,"INSERT INTO subjects(subject_code,subject_alias,subject_name,course_type,semester) VALUES (?,?,?,?,?)");
+        $sql->bind_param("ssssi",$subcode,$subalias,$subname,$subtype,$semester);
         $sql->execute();
     }
     catch(Exception $e)
