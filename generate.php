@@ -330,6 +330,46 @@ if ($_SESSION["userloggedin"] == 1) {
 <script>
     function generatett(e) {
         const formData = new FormData(document.getElementById('lecturecntform'));
+        let subjects;
+        let staff;
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
+
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // console.log(xhr.response);
+                console.log(JSON.parse(xhr.response));
+                subjects = JSON.parse(xhr.response);
+                console.log(typeof subjects);
+                // displayTimetable(JSON.parse(xhr1.response));
+            }
+        };
+
+        xhr.send("year=2&data=subjects");
+
+
+        var xhr2 = new XMLHttpRequest();
+
+        xhr2.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
+
+        xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr2.onreadystatechange = function() {
+            if (xhr2.readyState == 4 && xhr2.status == 200) {
+                // console.log(xhr.response);
+                console.log(JSON.parse(xhr2.response));
+                staff = JSON.parse(xhr2.response);
+                console.log(typeof staff);
+                console.log(staff['T01']);
+                // displayTimetable(JSON.parse(xhr1.response));
+            }
+        };
+
+        xhr2.send("year=2&data=staff");
 
         var xhr1 = new XMLHttpRequest();
 
@@ -337,12 +377,20 @@ if ($_SESSION["userloggedin"] == 1) {
 
         xhr1.onreadystatechange = function() {
             if (xhr1.readyState == 4 && xhr1.status == 200) {
-                // console.log(JSON.parse(xhr1.response));
-                displayTimetable(JSON.parse(xhr1.response));
+                // console.log(xhr1.response);
+                if (xhr1.responseText == "Exception") {
+                    alert("Failed To Generate Timetable with Specified Lecture Count.");
+                } else {
+
+                    console.log(JSON.parse(xhr1.response));
+                    displayTimetable(JSON.parse(xhr1.response), staff, subjects);
+                }
             }
         };
 
         xhr1.send(formData);
+
+
 
         // const timetableresponse = await fetch('http://localhost/TimeTableGenerator/services/generatett.php', {
         //     method: "POST",
@@ -352,12 +400,12 @@ if ($_SESSION["userloggedin"] == 1) {
         // console.log(await timetableresponse.json());
     }
 
-    function displayTimetable(timetable) {
+    function displayTimetable(timetable, staff, subjects) {
         let container = document.getElementById('timetables'); // Assumes you have a container div for the timetable display.
         container.innerHTML = ''; // Clear any existing timetable content
 
         const divisions = ['A', 'B', 'C'];
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const divisionCnt = {
             'A': 1,
             'B': 2,
@@ -385,11 +433,11 @@ if ($_SESSION["userloggedin"] == 1) {
                 days.forEach((day) => {
                     // Check for break times
                     if (slot === 3) {
-                        tableHTML += '<td>Tea Break</td>';
+                        tableHTML += '<td class="bg-warning">Tea Break</td>';
                         return;
                     }
                     if (slot === 6) {
-                        tableHTML += '<td>Lunch Break</td>';
+                        tableHTML += '<td class="bg-danger">Lunch Break</td>';
                         return;
                     }
 
@@ -403,7 +451,41 @@ if ($_SESSION["userloggedin"] == 1) {
                     const faculty = slotFaculty[facultyIndex] || 'No Faculty';
                     const subject = slotData[faculty] || 'Free';
 
-                    tableHTML += `<td>${subject} (${faculty})</td>`;
+                    if (faculty == "LAB" && typeof subject == 'object') {
+                        var i = 1;
+                        tableHTML += "<td>"
+                        Object.entries(subject).forEach(([key, value]) => {
+                            if (`${division}${i}` == key) {
+                                // tableHTML+=`${staff[key][name]} : ${subjects[value][subject_name]}`;
+                                tableHTML += `${key} : ${value}`;
+                            } else {
+                                // console.log(staff[key]['name']);
+                                // console.log(subjects[value]['subject_name'])
+                                tableHTML += `${division}${i} : ${subjects[value]['subject_alias']} : ${staff[key]['name']}`;
+                            }
+                            // console.log(`${division}${i} : ${key}: ${value}`);
+                            tableHTML += "<br>";
+                            i++;
+                        })
+                        // console.log(typeof subject);
+                        // console.log(subject);
+                        tableHTML += `</td>`;
+                    } else {
+                        // console.log(staff[faculty]['name']);
+                        // console.log(subjects[subject]['subject_alias']);
+                        // console.log(subject);
+                        // console.log(faculty);
+                        // tableHTML += `<td>${subject} (${faculty})</td>`;
+                        if (subject != "Free" && subject != division) {
+                            // console.log(subjects[subject]['subject_alias']);
+                            tableHTML += `<td>${subjects[subject]['subject_alias']} (${staff[faculty]['name']})</td>`;
+                        } else {
+                            tableHTML += `<td>OFF</td>`;
+                        }
+                        // console.log("\n");
+                    }
+                    // console.log("\n");
+
                 });
 
                 tableHTML += '</tr>';

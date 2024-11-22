@@ -338,7 +338,7 @@ if ($_SESSION["userloggedin"] == 1) {
                         <?php
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM batch_associations ORDER BY division and batchname ASC"
+                            "SELECT * FROM batch_associations ORDER BY division,subjectname ASC"
                         );
 
                         while ($row = mysqli_fetch_assoc($q)) {
