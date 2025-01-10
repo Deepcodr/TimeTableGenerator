@@ -278,7 +278,7 @@ if ($_SESSION["userloggedin"] == 1) {
 
             try {
                 $year = 2;
-                $sql = mysqli_prepare($conn, "SELECT distinct subject_code , subject_name FROM subjects WHERE semester=?");
+                $sql = mysqli_prepare($conn, "SELECT distinct subject_code , subject_name FROM subjects WHERE semester=? and subject_code!='OFF'");
                 $sql->bind_param("i", $year);
             } catch (Exception $e) {
                 echo $e->getMessage();
@@ -293,9 +293,40 @@ if ($_SESSION["userloggedin"] == 1) {
                 $subjects[$row['subject_code']] = $row['subject_name'];
             }
 
+            try {
+                $year = 2;
+                $sql = mysqli_prepare($conn, "SELECT * from timetable_status where year=?");
+                $sql->bind_param("i", $year);
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                // die;
+            }
+
+            $sql->execute();
+            $data = $sql->get_result();
+
+            $timetable_status = 0;
+
+            while ($row = mysqli_fetch_assoc($data)) {
+                $timetable_status = $row['status'];
+            }
             ?>
             <div class="container-fluid">
                 <!-- action="./services/generatett.php" -->
+                <div class="container">
+                    <form>
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Select Year</label>
+                            <select class="form-select" name="year">
+                                <option selected disabled>Year</option>
+                                <option value="2">2</option>
+                                <!-- <option value="LAB">lab</option> -->
+                                <!-- <option value="2">Two</option>
+                        <option value="3">Three</option> -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
                 <form id="lecturecntform" class="form-signup">
                     <table>
                         <tbody>
@@ -303,13 +334,13 @@ if ($_SESSION["userloggedin"] == 1) {
                             $lecturecountinput = "";
                             foreach ($subjects as $subjectid => $subject) {
                                 $subrow = "<tr>
-                        <td>$subject</td>
-                        <td>
-                        <div class='m-2'>
-                        <input type='number' class='form-control' name='" . $subjectid . "' placeholder='Enter lecture count'></input>
-                        </div>
-                        </td>
-                    </tr>";
+                            <td>$subject</td>
+                            <td>
+                            <div class='m-2'>
+                            <input type='number' class='form-control' name='" . $subjectid . "' placeholder='Enter lecture count'></input>
+                            </div>
+                            </td>
+                        </tr>";
                                 $lecturecountinput = $lecturecountinput . $subrow;
                             }
                             echo $lecturecountinput;
@@ -317,6 +348,7 @@ if ($_SESSION["userloggedin"] == 1) {
                         </tbody>
                     </table>
                     <button class="btn btn-primary btn-block" onclick="generatett()" type="button"><i class="fas fa-user-plus"></i>Generate</button>
+                    <button class="btn btn-primary btn-block" onclick="savett()" type="button"><i class="fas fa-user-plus"></i>Save Current Timetable</button>
                 </form>
             </div>
             <hr>
@@ -326,177 +358,217 @@ if ($_SESSION["userloggedin"] == 1) {
         </div>
     </main>
     <script src="./js/sidebars.js"></script>
-</body>
-<script>
-    function generatett(e) {
-        const formData = new FormData(document.getElementById('lecturecntform'));
+    <script>
+        let timetable;
         let subjects;
         let staff;
+        let updatedtt;
 
-        var xhr = new XMLHttpRequest();
+        function savett() {
+            console.log(updatedtt);
+            var xhr = new XMLHttpRequest();
 
-        xhr.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
-
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                // console.log(xhr.response);
-                console.log(JSON.parse(xhr.response));
-                subjects = JSON.parse(xhr.response);
-                console.log(typeof subjects);
-                // displayTimetable(JSON.parse(xhr1.response));
-            }
-        };
-
-        xhr.send("year=2&data=subjects");
-
-
-        var xhr2 = new XMLHttpRequest();
-
-        xhr2.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
-
-        xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-        xhr2.onreadystatechange = function() {
-            if (xhr2.readyState == 4 && xhr2.status == 200) {
-                // console.log(xhr.response);
-                console.log(JSON.parse(xhr2.response));
-                staff = JSON.parse(xhr2.response);
-                console.log(typeof staff);
-                console.log(staff['T01']);
-                // displayTimetable(JSON.parse(xhr1.response));
-            }
-        };
-
-        xhr2.send("year=2&data=staff");
-
-        var xhr1 = new XMLHttpRequest();
-
-        xhr1.open("POST", "/TimeTableGenerator/services/generatett.php", true);
-
-        xhr1.onreadystatechange = function() {
-            if (xhr1.readyState == 4 && xhr1.status == 200) {
-                // console.log(xhr1.response);
-                if (xhr1.responseText == "Exception") {
-                    alert("Failed To Generate Timetable with Specified Lecture Count.");
-                } else {
-
-                    console.log(JSON.parse(xhr1.response));
-                    displayTimetable(JSON.parse(xhr1.response), staff, subjects);
+            xhr.open("POST", "/TimeTableGenerator/services/savett.php", false);
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(JSON.parse(xhr.response));
+                    var rdata = JSON.parse(xhr.response);
+                    alert(rdata['message']);
                 }
-            }
-        };
+            };
 
-        xhr1.send(formData);
+            xhr.send(JSON.stringify(updatedtt));
+
+        }
+
+        function generatett(e) {
+            const formData = new FormData(document.getElementById('lecturecntform'));
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
+
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // console.log(xhr.response);
+                    console.log(JSON.parse(xhr.response));
+                    subjects = JSON.parse(xhr.response);
+                    console.log(typeof subjects);
+                    // displayTimetable(JSON.parse(xhr1.response));
+                }
+            };
+
+            xhr.send("year=2&data=subjects");
 
 
+            var xhr2 = new XMLHttpRequest();
 
-        // const timetableresponse = await fetch('http://localhost/TimeTableGenerator/services/generatett.php', {
-        //     method: "POST",
-        //     body: formData
-        // })
+            xhr2.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
 
-        // console.log(await timetableresponse.json());
-    }
+            xhr2.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    function displayTimetable(timetable, staff, subjects) {
-        let container = document.getElementById('timetables'); // Assumes you have a container div for the timetable display.
-        container.innerHTML = ''; // Clear any existing timetable content
+            xhr2.onreadystatechange = function() {
+                if (xhr2.readyState == 4 && xhr2.status == 200) {
+                    // console.log(xhr.response);
+                    console.log(JSON.parse(xhr2.response));
+                    staff = JSON.parse(xhr2.response);
+                    console.log(typeof staff);
+                    console.log(staff['T01']);
+                    // displayTimetable(JSON.parse(xhr1.response));
+                }
+            };
 
-        const divisions = ['A', 'B', 'C'];
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const divisionCnt = {
-            'A': 1,
-            'B': 2,
-            'C': 3
-        };
-        const timeSlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 11:15 AM', '11:15 AM - 12:15 PM', '12:15 PM - 1:15 PM', '1:15 PM - 2:15 PM', '2:15 PM - 3:15 PM', '3:15 PM - 4:15 PM'];
+            xhr2.send("year=2&data=staff");
 
-        divisions.forEach((division) => {
-            let tableHTML = `<h2>Timetable for Division ${division}</h2>`;
-            tableHTML += '<table class="table table-bordered">';
-            tableHTML += '<tr><th>Time Slot</th>';
+            var xhr1 = new XMLHttpRequest();
 
-            // Add headers for days
-            days.forEach((day) => {
-                tableHTML += `<th>${day}</th>`;
-            });
-            tableHTML += '</tr>';
+            xhr1.open("POST", "/TimeTableGenerator/services/generatett.php", true);
 
-            // Loop through each time slot
-            for (let slot = 1; slot <= 8; slot++) {
-                tableHTML += '<tr>';
-                tableHTML += `<td>${timeSlots[slot - 1]}</td>`; // Display the time slot name
-
-                // Add data for each day
-                days.forEach((day) => {
-                    // Check for break times
-                    if (slot === 3) {
-                        tableHTML += '<td class="bg-warning">Tea Break</td>';
-                        return;
-                    }
-                    if (slot === 6) {
-                        tableHTML += '<td class="bg-danger">Lunch Break</td>';
-                        return;
-                    }
-
-                    // Check if there's a subject assigned at this slot
-                    const dayData = timetable[day] || {};
-                    const slotData = dayData[slot] || {};
-
-                    // Get the faculty and subject for this slot
-                    const slotFaculty = Object.keys(slotData);
-                    const facultyIndex = divisionCnt[division] - 1;
-                    const faculty = slotFaculty[facultyIndex] || 'No Faculty';
-                    const subject = slotData[faculty] || 'Free';
-
-                    if (faculty == "LAB" && typeof subject == 'object') {
-                        var i = 1;
-                        tableHTML += "<td>"
-                        Object.entries(subject).forEach(([key, value]) => {
-                            if (`${division}${i}` == key) {
-                                // tableHTML+=`${staff[key][name]} : ${subjects[value][subject_name]}`;
-                                tableHTML += `${key} : ${value}`;
-                            } else {
-                                // console.log(staff[key]['name']);
-                                // console.log(subjects[value]['subject_name'])
-                                tableHTML += `${division}${i} : ${subjects[value]['subject_alias']} : ${staff[key]['name']}`;
-                            }
-                            // console.log(`${division}${i} : ${key}: ${value}`);
-                            tableHTML += "<br>";
-                            i++;
-                        })
-                        // console.log(typeof subject);
-                        // console.log(subject);
-                        tableHTML += `</td>`;
+            xhr1.onreadystatechange = function() {
+                if (xhr1.readyState == 4 && xhr1.status == 200) {
+                    // console.log(xhr1.response);
+                    if (xhr1.responseText == "Exception") {
+                        alert("Failed To Generate Timetable with Specified Lecture Count.");
                     } else {
-                        // console.log(staff[faculty]['name']);
-                        // console.log(subjects[subject]['subject_alias']);
-                        // console.log(subject);
-                        // console.log(faculty);
-                        // tableHTML += `<td>${subject} (${faculty})</td>`;
-                        if (subject != "Free" && subject != division) {
-                            // console.log(subjects[subject]['subject_alias']);
-                            tableHTML += `<td>${subjects[subject]['subject_alias']} (${staff[faculty]['name']})</td>`;
+
+                        console.log(JSON.parse(xhr1.response));
+                        timetable = JSON.parse(xhr1.response);
+                        displayTimetable();
+                    }
+                }
+            };
+
+            xhr1.send(formData);
+
+
+
+            // const timetableresponse = await fetch('http://localhost/TimeTableGenerator/services/generatett.php', {
+            //     method: "POST",
+            //     body: formData
+            // })
+
+            // console.log(await timetableresponse.json());
+        }
+
+        function displayTimetable() {
+            let container = document.getElementById('timetables'); // Assumes you have a container div for the timetable display.
+            container.innerHTML = ''; // Clear any existing timetable content
+
+            const year = "2";
+            const divisions = ['A', 'B', 'C'];
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const divisionCnt = {
+                'A': 1,
+                'B': 2,
+                'C': 3
+            };
+            updatedtt = {};
+            updatedtt[year] = {};
+            const timeSlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 11:15 AM', '11:15 AM - 12:15 PM', '12:15 PM - 1:15 PM', '1:15 PM - 2:15 PM', '2:15 PM - 3:15 PM', '3:15 PM - 4:15 PM'];
+
+            divisions.forEach((division) => {
+                if (!updatedtt[year][division]) {
+                    updatedtt[year][division] = {};
+                }
+                let tableHTML = `<h2>Timetable for Division ${division}</h2>`;
+                tableHTML += '<table class="table table-bordered">';
+                tableHTML += '<tr ><th class="bg-warning">Time Slot</th>';
+
+                // Add headers for days
+                days.forEach((day) => {
+                    tableHTML += `<th class="bg-warning">${day}</th>`;
+                });
+                tableHTML += '</tr>';
+
+                // Loop through each time slot
+                for (let slot = 1; slot <= 8; slot++) {
+                    tableHTML += '<tr>';
+                    tableHTML += `<td class="bg-warning">${timeSlots[slot - 1]}</td>`; // Display the time slot name
+
+                    // Add data for each day
+                    days.forEach((day) => {
+                        if (!updatedtt[year][division][day]) {
+                            updatedtt[year][division][day] = {};
+                        }
+                        if (!updatedtt[year][division][day][slot]) {
+                            updatedtt[year][division][day][slot] = {};
+                        }
+                        // Check for break times
+                        if (slot === 3) {
+                            tableHTML += '<td class="bg-warning">Tea Break</td>';
+                            return;
+                        }
+                        if (slot === 6) {
+                            tableHTML += '<td class="bg-warning">Lunch Break</td>';
+                            return;
+                        }
+
+                        // Check if there's a subject assigned at this slot
+                        const dayData = timetable[day] || {};
+                        const slotData = dayData[slot] || {};
+
+                        // Get the faculty and subject for this slot
+                        const slotFaculty = Object.keys(slotData);
+                        const facultyIndex = divisionCnt[division] - 1;
+                        const faculty = slotFaculty[facultyIndex] || 'No Faculty';
+                        const subject = slotData[faculty] || 'Free';
+
+                        if (faculty == "LAB" && typeof subject == 'object') {
+                            var i = 1;
+                            tableHTML += "<td>"
+                            Object.entries(subject).forEach(([key, value]) => {
+                                if (`${division}${i}` == key) {
+                                    // tableHTML+=`${staff[key][name]} : ${subjects[value][subject_name]}`;
+                                    tableHTML += `${key} : ${value}`;
+                                    updatedtt[year][division][day][slot][key] = value;
+                                } else {
+                                    // console.log(staff[key]['name']);
+                                    // console.log(subjects[value]['subject_name'])
+                                    tableHTML += `${division}${i} : ${subjects[value]['subject_alias']} : ${staff[key]['name']}`;
+                                    updatedtt[year][division][day][slot][`${division}${i}`] = {
+                                        [subjects[value]['subject_code']]: staff[key]['staffId']
+                                    }
+                                }
+                                // console.log(`${division}${i} : ${key}: ${value}`);
+                                tableHTML += "<br>";
+                                i++;
+                            })
+                            // console.log(typeof subject);
+                            // console.log(subject);
+                            tableHTML += `</td>`;
                         } else {
-                            tableHTML += `<td>OFF</td>`;
+                            // console.log(staff[faculty]['name']);
+                            // console.log(subjects[subject]['subject_alias']);
+                            // console.log(subject);
+                            // console.log(faculty);
+                            // tableHTML += `<td>${subject} (${faculty})</td>`;
+                            if (subject != "Free" && subject != division) {
+                                // console.log(subjects[subject]['subject_alias']);
+                                tableHTML += `<td>${subjects[subject]['subject_alias']} (${staff[faculty]['name']})</td>`;
+                                updatedtt[year][division][day][slot][subjects[subject]['subject_code']] = staff[faculty]['staffId'];
+                            } else {
+                                tableHTML += `<td>OFF</td>`;
+                                updatedtt[year][division][day][slot]['OFF'] = "OFF";
+                            }
+                            // console.log("\n");
                         }
                         // console.log("\n");
-                    }
-                    // console.log("\n");
 
-                });
+                    });
 
-                tableHTML += '</tr>';
-            }
+                    tableHTML += '</tr>';
+                }
 
-            tableHTML += '</table>';
+                tableHTML += '</table>';
 
-            // Append the generated table HTML for the division to the container
-            container.innerHTML += tableHTML;
-        });
-    }
-</script>
+                // Append the generated table HTML for the division to the container
+                container.innerHTML += tableHTML;
+            });
+        }
+    </script>
+</body>
 
 </html>

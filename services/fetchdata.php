@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         $q = mysqli_query(
             $conn,
-            "SELECT * FROM subjects where semester=$semester"
+            "SELECT * FROM subjects where semester=$semester and subject_code!='OFF'"
         );
 
         $row_count = mysqli_num_rows($q);
