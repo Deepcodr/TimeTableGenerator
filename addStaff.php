@@ -149,15 +149,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#speedometer2" />
-                        </svg>
-                        My Time-Tables
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/alltt.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#table" />
                         </svg>
@@ -224,7 +216,9 @@ if ($_SESSION["userloggedin"] == 1) {
             <hr>
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <?php
+                    echo '<img src=' . $_SESSION['avatar'] . ' alt="" width="32" height="32" class="rounded-circle me-2">';
+                    ?>
                     <strong>
                         <?php
                         if (isset($_SESSION["userloggedin"])) {
@@ -259,6 +253,16 @@ if ($_SESSION["userloggedin"] == 1) {
                     <div class="mt-4 mb-3">
                         <label for="name" class="form-label">Name of Staff</label>
                         <input type="text" id="user-name" class="form-control" placeholder="Full name" required="" autofocus="" name="fullname">
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Select Year</label>
+                        <select class="form-select" name="year">
+                            <option selected disabled>Year</option>
+                            <option value="1">First Year</option>
+                            <option value="2">Second Year</option>
+                            <option value="3">Third Year</option>
+                            <option value="4">Final Year</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Staff Phone Number</label>
@@ -302,13 +306,14 @@ if ($_SESSION["userloggedin"] == 1) {
                         <th width="190">qualification</th>
                         <th width="190">Contact No.</th>
                         <th width="290">Email ID</th>
+                        <th width="290">Year</th>
                         <th width="40">Action</th>
                     </tr>
                     <tbody>
                         <?php
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM staff ORDER BY staffId ASC"
+                            "SELECT * FROM staff where staffId!='OFF' ORDER BY staffId ASC"
                         );
 
                         while ($row = mysqli_fetch_assoc($q)) {
@@ -317,6 +322,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     <td>{$row['qualification']}</td>
                     <td>{$row['phone']}</td>
                     <td>{$row['emailId']}</td>
+                    <td>{$row['year']}</td>
                    <td><a class='btn btn-danger' href='./services/handleDelete.php?query=staff&staffid={$row['staffId']}'>Delete</a></td>
                     </tr>\n";
                         }

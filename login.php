@@ -13,7 +13,9 @@
             document.getElementById('pagestyle').setAttribute('href', sheet);
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/f5126202d4.js" crossorigin="anonymous"></script>
+    <script src="./js/login.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/login.css">
 </head>
 
@@ -44,36 +46,32 @@
         hidetoast();
         </script>';
         }
-    } elseif (isset($_SESSION["loginstatus"])) {
+    } else if (isset($_SESSION["loginstatus"])) {
         if ($_SESSION["loginstatus"] === 2) {
-            echo '<div class="toast align-items-center text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                User Does Not Exist!
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            echo '<div id="dangertoast" class="alert alert-danger container mt-4" role="alert">
+            <h4 class="alert-heading">User Does Not Exist!</h4>
             </div>
-            </div>';
+            <script>
+                setTimeout(hidetoast,5000);
+            </script>';
         } elseif ($_SESSION["loginstatus"] === -1) {
-            echo '<div class="toast align-items-center text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                User Does Not Exist!
+            echo '<div id="dangertoast" class="alert alert-danger container mt-4" role="alert">
+                <h4 class="alert-heading">Invalid Username Or Password</h4>
                 </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            </div>';
+                <script>
+                    setTimeout(hidetoast,5000);
+                </script>';
         }
     } else {
         echo '<script>
-    hidetoast();
-    </script>';
+        hidetoast();
+        </script>';
     }
     ?>
     <div id="logreg-forms">
-        <form id="login-form" class="form-signin" action="./services/loginuser.php" method="post">
+        <form id="login-form" class="form-signin" action="./services/loginuser.php" method="post" onsubmit="return validateLogin()">
             <h1 class="h3 mb-3 font-weight-normal" style="text-align: center"> Sign in</h1>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="user-type">User Type</label>
                 <select name="user-type" class="form-control" id="user-type">
                     <option selected value="0">Student</option>
@@ -81,14 +79,18 @@
                     <option value=2>Staff</option>
                 </select>
             </div>
-            <input type="text" id="inputEmail" class="form-control" placeholder="Username" required="" autofocus="" name="username">
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
+            <div class="mb-3">
+                <input type="email" id="inputEmail" class="form-control" placeholder="Username" required="" autofocus="" name="username">
+            </div>
+            <div class="mb-3">
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="" name="password">
+            </div>
 
-            <button class="btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+            <button class="form-control btn btn-success btn-block" type="submit"><i class="fas fa-sign-in-alt"></i><br> Sign in</button>
             <!-- <a href="#" id="forgot_pswd">Forgot password?</a> -->
             <hr>
             <!-- <p>Don't have an account!</p>  -->
-            <button class="btn btn-primary btn-block" type="button" id="btn-signup"><i class="fas fa-user-plus"></i><a href="./register.php">Sign up New Account</a></button>
+            <a class="btn btn-primary btn-block text-light" href="./register.php" id="btn-signup"><i class="fas fa-user-plus"></i><br>Sign up New Account</a>
         </form>
 
         <form action="/reset/password/" class="form-reset">
@@ -98,5 +100,4 @@
         </form>
     </div>
 </body>
-
 </html>

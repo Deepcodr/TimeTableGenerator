@@ -11,10 +11,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     $password=$_REQUEST['password'];
     $staffId=$_REQUEST['staffID'];
     $qual = $_REQUEST['qualification'];
+    $year=$_REQUEST['year'];
 
     try{
-        $sql=mysqli_prepare($conn,"INSERT INTO staff(phone,emailId,password,name,staffId,qualification) VALUES (?,?,?,?,?,?)");
-        $sql->bind_param("ssssss",$phone,$email,$password,$name,$staffId,$qual);
+        $sql=mysqli_prepare($conn,"INSERT INTO staff(phone,emailId,password,name,staffId,qualification,year) VALUES (?,?,?,?,?,?,?)");
+        $sql->bind_param("ssssssi",$phone,$email,$password,$name,$staffId,$qual,$year);
     }
     catch(Exception $e)
     {

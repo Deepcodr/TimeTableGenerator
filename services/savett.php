@@ -94,8 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try{
         $status=1;
-        $sql=mysqli_prepare($conn,"INSERT INTO timetable_status(year,status) VALUES (?,?)");
-        $sql->bind_param("ii",$year,$status);
+        $sql=mysqli_prepare($conn,"UPDATE timetable_status SET status=? WHERE year=?");
+        $sql->bind_param("ii",$status,$year);
         $sql->execute();
         echo json_encode(['status' => 'success', 'message' => 'Timetable Saved Successfully']);
         // echo $conn->error;
