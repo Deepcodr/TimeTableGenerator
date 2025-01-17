@@ -150,15 +150,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#speedometer2" />
-                        </svg>
-                        My Time-Tables
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/alltt.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#table" />
                         </svg>
@@ -225,7 +217,9 @@ if ($_SESSION["userloggedin"] == 1) {
             <hr>
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <?php
+                    echo '<img src=' . $_SESSION['avatar'] . ' alt="" width="32" height="32" class="rounded-circle me-2">';
+                    ?>
                     <strong>
                         <?php
                         if (isset($_SESSION["userloggedin"])) {
@@ -338,7 +332,7 @@ if ($_SESSION["userloggedin"] == 1) {
                         <?php
                         $q = mysqli_query(
                             mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM batch_associations ORDER BY division and batchname ASC"
+                            "SELECT * FROM batch_associations ORDER BY division,subjectname ASC"
                         );
 
                         while ($row = mysqli_fetch_assoc($q)) {
@@ -402,8 +396,8 @@ if ($_SESSION["userloggedin"] == 1) {
         xhr1.send("year=" + e + "&data=divisions");
     }
 
-    function fetch_batches(e){
-        var year=document.getElementById('year').value;
+    function fetch_batches(e) {
+        var year = document.getElementById('year').value;
         var xhr2 = new XMLHttpRequest();
 
         // Define the type of request, the URL, and if it's asynchronous
@@ -423,7 +417,7 @@ if ($_SESSION["userloggedin"] == 1) {
         // Send the selected value as POST data
         // var division = document.getElementById('divisionselection').value;
         // console.log(division);
-        xhr2.send("year=" + year + "&data=batches&division="+e);
+        xhr2.send("year=" + year + "&data=batches&division=" + e);
     }
 </script>
 

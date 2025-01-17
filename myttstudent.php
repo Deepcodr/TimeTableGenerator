@@ -4,10 +4,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 if ($_SESSION["userloggedin"] == 1) {
-    if ($_SESSION["adminstatus"] == 0) {
-        echo "You Dont Have Access to this page";
-        die();
-    }
 } else {
     header("Location: http://localhost/TimeTableGenerator/login.php");
     exit();
@@ -135,14 +131,14 @@ if ($_SESSION["userloggedin"] == 1) {
     </svg>
 
     <main class="d-flex flex-nowrap">
-        <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; height:100vh;">
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; height:100vh;">
             <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span class="fs-4">Dashboard</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/TimeTableGenerator/administration.php" class="nav-link active" aria-current="page">
+                    <a href="/TimeTableGenerator/studentdashboard.php" class="nav-link text-white" aria-current="page">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#home" />
                         </svg>
@@ -150,67 +146,19 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="/TimeTableGenerator/alltt.php" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/myttstudent.php" class="nav-link active text-white">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <use xlink:href="#speedometer2" />
+                        </svg>
+                        My Time-Tables
+                    </a>
+                </li>
+                <li>
+                    <a href="/TimeTableGenerator/allttstudent.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#table" />
                         </svg>
                         All Time-Tables
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/generate.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#grid" />
-                        </svg>
-                        Generate TimeTables
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/associate.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Staff
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/associateLabs.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Associate Labs
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/addStaff.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Add Staff
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/addDivisions.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Add Divisions
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/addBatches.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Add Batches
-                    </a>
-                </li>
-                <li>
-                    <a href="/TimeTableGenerator/addSubjects.php" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#people-circle" />
-                        </svg>
-                        Add Subjects
                     </a>
                 </li>
             </ul>
@@ -245,90 +193,130 @@ if ($_SESSION["userloggedin"] == 1) {
                 </ul>
             </div>
         </div>
-        <!-- <div class="b-example-divider b-example-vr"></div> -->
         <div class="dashboard-content container-fluid">
-            <div class="display-4">Add New Subject</div>
-            <div class="container-fluid">
-                <!-- onsubmit="return validateRegistration()" -->
-                <form action="./services/registerSub.php" method="POST" class="form-signup">
-                    <div class="mt-4 mb-3">
-                        <label for="subjectcode" class="form-label">Subject Code</label>
-                        <input type="text" id="subject-code" class="form-control" placeholder="Subject Code" required="" autofocus="" name="subjectcode">
-                    </div>
-                    <div class="mb-3">
-                        <label for="subjectname" class="form-label">Subject Name</label>
-                        <input type="text" id="sub-name" class="form-control" placeholder="Subject Name" required="" autofocus="" name="subjectname">
-                    </div>
-                    <div class="mb-3">
-                        <label for="subjectalias" class="form-label">Subject Alias</label>
-                        <input type="text" id="sub-alias" class="form-control" placeholder="Subject Short Name" required="" autofocus="" name="subalias">
-                    </div>
-                    <div class="mb-3">
-                        <label for="subjecttype" class="form-label">Subject Type</label>
-                        <select class="form-select" aria-label="Default select example" name="subtype">
-                            <option disabled>Select Type</option>
-                            <option value="THEORY">theory</option>
-                            <option value="LAB">lab</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="semester" class="form-label">Semester</label>
-                        <select class="form-select" aria-label="Default select example" name="semester">
-                        <option selected disabled>Year</option>
-                            <option value="1">First Year</option>
-                            <option value="2">Second Year</option>
-                            <option value="3">Third Year</option>
-                            <option value="4">Final Year</option>
-                        </select>
-                        <!-- <input type="number" id="semester" class="form-control" placeholder="semester" required autofocus="" name="semester"> -->
-                    </div>
+            <?php
+            include('../TimeTableGenerator/includes/dbconnection.php');
+            try {
+                $sql = mysqli_prepare($conn, "SELECT * FROM `students` join divisions on students.division = divisions.id where username=?;");
+                $sql->bind_param("s", $_SESSION['userid']);
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                // die;
+            }
 
-                    <!-- <input type="text" id="qualification" class="form-control" placeholder="Qualification" required autofocus="" name="qualification">
-                    <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
-                    <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="password"> -->
+            $sql->execute();
+            $data = $sql->get_result();
 
-                    <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>
-                </form>
-
-            </div>
-            <hr>
-            <div class="container-fluid">
-                <h3><strong>Subject Information </strong></h3>
-                <table id="subjectstable" class="table table-bordered">
-                    <tr>
-                        <th width="130">Subject Code</th>
-                        <th width=290>Name</th>
-                        <th width=290>Subject Alias</th>
-                        <th width="190">Type</th>
-                        <th width="190">Semester</th>
-                        <th width="190">Action</th>
-                        <!-- <th width="290">Email ID</th>
-                <th width="40">Action</th> -->
-                    </tr>
-                    <tbody>
-                        <?php
-                        $q = mysqli_query(
-                            mysqli_connect("localhost", "root", "root", "Dev"),
-                            "SELECT * FROM subjects ORDER BY subject_code ASC"
-                        );
-
-                        while ($row = mysqli_fetch_assoc($q)) {
-                            echo "<tr><td>{$row['subject_code']}</td>
-                <td>{$row['subject_name']}</td>
-                <td>{$row['subject_alias']}</td>
-                <td>{$row['course_type']}</td>
-                <td>{$row['semester']}</td>
-               <td><a class='btn btn-danger' href='./services/handleDelete.php?query=subject&subcode={$row['subject_code']}'>Delete</a></td>
-                </tr>\n";
-                        }
-                        // echo "<script>deleteHandlers();</script>";
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+            while ($row = mysqli_fetch_assoc($data)) {
+                echo '
+                <div class="dashboard-heading display-4">Timetable For ' . $_SESSION['username'] . '</div>
+                <hr>
+                <div class="container-fluid">
+                    <div id="timetables"></div>
+                </div>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        fetch_updatedata(' . $row['year'] . ',"' . $row['name'] . '");
+                    });
+                </script>';
+            }
+            ?>
         </div>
     </main>
-    <script src="./js/sidebars.js"></script>
 </body>
+<script src="./js/sidebars.js"></script>
+<script>
+    let timetable;
+    let subjects;
+    let staff;
+    let updatedtt;
+
+    function fetch_updatedata(e, division) {
+        console.log(division);
+        var xhr = new XMLHttpRequest();
+
+        // Define the type of request, the URL, and if it's asynchronous
+        xhr.open("POST", "/TimeTableGenerator/services/fetch_updatedata.php", true);
+
+        // Set the request header to indicate the content type for POST
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        // Handle the response from the PHP file
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Update the div with the response from the PHP file
+                var timetable = JSON.parse(xhr.response);
+                displayexistingtt(timetable, division);
+
+            }
+        };
+
+        // Send the selected value as POST data
+        xhr.send("year=" + e + "&data=timetable&type=alltt");
+    }
+
+    function displayexistingtt(timetable, userdivision) {
+        var container = document.getElementById('timetables');
+
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const timeSlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 11:15 AM', '11:15 AM - 12:15 PM', '12:15 PM - 1:15 PM', '1:15 PM - 2:15 PM', '2:15 PM - 3:15 PM', '3:15 PM - 4:15 PM'];
+
+        Object.entries(timetable).forEach(([division, divisiondata]) => {
+            if (division != userdivision) {
+                return;
+            }
+            let tableHTML = `<h2>Timetable for Division ${division}</h2>`;
+            tableHTML += '<table class="table table-bordered">';
+            tableHTML += '<tr ><th class="bg-warning">Time Slot</th>';
+
+            // Add headers for days
+            days.forEach((day) => {
+                tableHTML += `<th class="bg-warning">${day}</th>`;
+            });
+            tableHTML += '</tr>';
+
+            // Loop through each time slot
+            for (let slot = 1; slot <= 8; slot++) {
+                tableHTML += '<tr>';
+                tableHTML += `<td class="bg-warning">${timeSlots[slot - 1]}</td>`; // Display the time slot name
+
+                // Add data for each day
+                days.forEach((day) => {
+                    // Check for break times
+                    if (slot === 3) {
+                        tableHTML += '<td class="bg-warning">Tea Break</td>';
+                        return;
+                    }
+                    if (slot === 6) {
+                        tableHTML += '<td class="bg-warning">Lunch Break</td>';
+                        return;
+                    }
+
+                    if (Object.keys(timetable[division][day][slot]).length > 1) {
+                        var i = 1;
+                        tableHTML += "<td>"
+                        Object.entries(timetable[division][day][slot]).forEach(([key, value]) => {
+                            // tableHTML += `${Objects.keys(timetable[division][day][slot])[index]} : ${key} : ${value}`;
+                            tableHTML += `${key} : ${Object.keys(timetable[division][day][slot][key])[0]} : ${timetable[division][day][slot][key][Object.keys(timetable[division][day][slot][key])[0]]}`;
+
+                            tableHTML += "<br>";
+                            i++;
+                        })
+                        tableHTML += `</td>`;
+                    } else {
+                        tableHTML += `<td>${Object.keys(timetable[division][day][slot])[0]} (${timetable[division][day][slot][Object.keys(timetable[division][day][slot])[0]]})</td>`;
+                    }
+                });
+
+                tableHTML += '</tr>';
+            }
+
+            tableHTML += '</table>';
+
+            // Append the generated table HTML for the division to the container
+            container.innerHTML += tableHTML;
+        });
+    }
+</script>
 
 </html>

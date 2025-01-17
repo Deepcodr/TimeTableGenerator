@@ -9,10 +9,13 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
     $phone=$_REQUEST['phone'];
     $email=$_REQUEST['email'];
     $password=$_REQUEST['password'];
+    $year=$_REQUEST['year'];
+    $division=$_REQUEST['division'];
+    $prn=$_REQUEST['prn'];
 
     try{
-        $sql=mysqli_prepare($conn,"INSERT INTO students(username,phone,email,password,name) VALUES (?,?,?,?,?)");
-        $sql->bind_param("sssss",$email,$phone,$email,$password,$name);
+        $sql=mysqli_prepare($conn,"INSERT INTO students(username,phone,email,password,name,PRN,year,division) VALUES (?,?,?,?,?,?,?,?)");
+        $sql->bind_param("sssssiii",$email,$phone,$email,$password,$name,$prn,$year,$division);
     }
     catch(Exception $e)
     {
@@ -36,6 +39,6 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
 else
 {
     $_SESSION['registerstatus']=0;
-    echo "NON SENSE";
+    echo "Registration Failed";
 }
 ?>

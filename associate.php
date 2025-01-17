@@ -26,8 +26,10 @@ if ($_SESSION["userloggedin"] == 1) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <link href="./css/sidebars.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/dashboard.css">
+    <script src="./js/formvalidations.js"></script>
 
     <style>
         .bd-placeholder-img {
@@ -150,15 +152,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16">
-                            <use xlink:href="#speedometer2" />
-                        </svg>
-                        My Time-Tables
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link text-white">
+                    <a href="/TimeTableGenerator/alltt.php" class="nav-link text-white">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <use xlink:href="#table" />
                         </svg>
@@ -225,7 +219,9 @@ if ($_SESSION["userloggedin"] == 1) {
             <hr>
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <?php
+                    echo '<img src=' . $_SESSION['avatar'] . ' alt="" width="32" height="32" class="rounded-circle me-2">';
+                    ?>
                     <strong>
                         <?php
                         if (isset($_SESSION["userloggedin"])) {
@@ -261,9 +257,10 @@ if ($_SESSION["userloggedin"] == 1) {
                         <label for="staff" class="form-label">Select Staff to associate</label>
                         <select name="staff" class="form-select">
                             <?php
+                            include('../TimeTableGenerator/includes/dbconnection.php');
                             $q = mysqli_query(
-                                mysqli_connect("localhost", "root", "root", "Dev"),
-                                "SELECT * FROM staff"
+                                $conn,
+                                "SELECT * FROM staff where staffId!='OFF'"
                             );
                             $row_count = mysqli_num_rows($q);
                             if ($row_count) {
@@ -283,10 +280,10 @@ if ($_SESSION["userloggedin"] == 1) {
                         <label for="year" class="form-label">Select Year</label>
                         <select class="form-select" name="year" onchange="fetch_updatedata(this.value)">
                             <option selected disabled>Year</option>
-                            <option value="2">2</option>
-                            <!-- <option value="LAB">lab</option> -->
-                            <!-- <option value="2">Two</option>
-                        <option value="3">Three</option> -->
+                            <option value="1">First Year</option>
+                            <option value="2">Second Year</option>
+                            <option value="3">Third Year</option>
+                            <option value="4">Final Year</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -328,7 +325,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     <tbody>
                         <?php
                         $q = mysqli_query(
-                            mysqli_connect("localhost", "root", "root", "Dev"),
+                            $conn,
                             "SELECT * FROM associations ORDER BY division ASC"
                         );
 
