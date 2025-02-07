@@ -259,9 +259,11 @@ if ($_SESSION["userloggedin"] == 1) {
                         <label for="year" class="form-label">Select Year</label>
                         <select class="form-select" aria-label="Default select example" name="year">
                             <option disabled>Select Year</option>
+                            <option value="1">First Year</option>
                             <option value="2">Second Year</option>
-                            <!-- <option value="2">Two</option>
-                            <option value="3">Three</option> -->
+                            <option value="3">Third Year</option>
+                            <option value="4">Fourth Year</option>
+                            
                         </select>
                     </div>
                     <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>
