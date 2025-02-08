@@ -250,7 +250,7 @@ if ($_SESSION["userloggedin"] == 1) {
             <div class="display-4">Add New Staff</div>
             <div class="container-fluid">
                 <!-- onsubmit="return validateStaffRegistration()" -->
-                <form action="./servces/registerStaff.php" method="POST" class="form-signup">
+                <form action="./services/registerStaff.php" method="POST" class="form-signup">
                     <div class="mt-4 mb-3">
                         <label for="name" class="form-label">Name of Staff</label>
                         <input type="text" id="user-name" class="form-control" placeholder="Full name" required="" autofocus="" name="fullname">

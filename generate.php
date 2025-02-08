@@ -309,7 +309,7 @@ if ($_SESSION["userloggedin"] == 1) {
                 <div class="container">
                     <div class="mb-3">
                         <label for="year" class="form-label">Select Year</label>
-                        <select class="form-select" name="year" onchange="fetch_updatedata(this.value)">
+                        <select id="year-selection" class="form-select" name="year" onchange="fetch_updatedata(this.value)">
                             <option selected disabled>Year</option>
                             <option value="1">First Year</option>
                             <option value="2">Second Year</option>
@@ -373,6 +373,9 @@ if ($_SESSION["userloggedin"] == 1) {
     function generatett(e) {
         const formData = new FormData(document.getElementById('lecturecntform'));
 
+        var yearselection = document.getElementById("year-selection");
+        var year= yearselection.options[yearselection.selectedIndex].value;
+
         var xhr = new XMLHttpRequest();
 
         xhr.open("POST", "/TimeTableGenerator/services/fetchdata.php", false);
@@ -389,7 +392,8 @@ if ($_SESSION["userloggedin"] == 1) {
             }
         };
 
-        xhr.send("year=2&data=subjects");
+
+        xhr.send(`year=${year}&data=subjects`);
 
 
         var xhr2 = new XMLHttpRequest();
@@ -409,7 +413,7 @@ if ($_SESSION["userloggedin"] == 1) {
             }
         };
 
-        xhr2.send("year=2&data=staff");
+        xhr2.send(`year=${year}&data=staff`);
 
         var xhr1 = new XMLHttpRequest();
 
@@ -447,7 +451,9 @@ if ($_SESSION["userloggedin"] == 1) {
         let container = document.getElementById('timetables'); // Assumes you have a container div for the timetable display.
         container.innerHTML = ''; // Clear any existing timetable content
 
-        const year = "2";
+        var yearselection = document.getElementById("year-selection");
+        var year= yearselection.options[yearselection.selectedIndex].value.toString();
+
         const divisions = ['A', 'B', 'C'];
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const divisionCnt = {
@@ -455,8 +461,10 @@ if ($_SESSION["userloggedin"] == 1) {
             'B': 2,
             'C': 3
         };
+
         updatedtt = {};
         updatedtt[year] = {};
+        
         const timeSlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 11:15 AM', '11:15 AM - 12:15 PM', '12:15 PM - 1:15 PM', '1:15 PM - 2:15 PM', '2:15 PM - 3:15 PM', '3:15 PM - 4:15 PM'];
 
         divisions.forEach((division) => {
