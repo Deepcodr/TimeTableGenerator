@@ -277,10 +277,10 @@ if ($_SESSION["userloggedin"] == 1) {
                         <label for="year" class="form-label">Select Year</label>
                         <select id="year" class="form-select" name="year" onchange="fetch_updatedata(this.value)">
                             <option selected disabled>Year</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                            <option value="1">First Year</option>
+                            <option value="2">Second Year</option>
+                            <option value="3">Third Year</option>
+                            <option value="4">Fourth Year</option>
                             <!-- <option value="LAB">lab</option> -->
                             <!-- <option value="2">Two</option>
                         <option value="3">Three</option> -->
