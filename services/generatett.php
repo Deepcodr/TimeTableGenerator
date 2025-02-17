@@ -7,7 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subjects = [];
     // $lecturedata = $_POST["TK01"];
 
+    $year = $_POST["timetable-year"];
+
     $subcnt = count($_POST);
+
+    $subcnt= $subcnt-1;
 
     $lctrcnt = 0;
 
@@ -37,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // echo $sub1;
 
     try {
-        $year = 2;
         $sql = mysqli_prepare($conn, "SELECT * FROM associations WHERE year=?");
         $sql->bind_param("i", $year);
     } catch (Exception $e) {
@@ -56,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // echo json_encode($associations);
 
     try {
-        $year = 2;
         $sql = mysqli_prepare($conn, "SELECT distinct subject_code , subject_name FROM subjects WHERE semester=?");
         $sql->bind_param("i", $year);
     } catch (Exception $e) {
@@ -85,7 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // echo json_encode($lecidarr);
 
     try {
-        $year = 2;
         $sql = mysqli_prepare($conn, "SELECT * FROM batch_associations WHERE year=? ORDER BY batchname");
         $sql->bind_param("i", $year);
     } catch (Exception $e) {

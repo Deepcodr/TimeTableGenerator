@@ -104,7 +104,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $mystring = "<form id='lecturecntform' class='form-signup'>
                             <table>
-                                <tbody>";
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class='m-2'>
+                                            <input type='number' class='form-control d-none' name='timetable-year' placeholder='Timetable Year' value='".$semester."'>
+                                            </div>
+                                        </td>
+                                    </tr>";
                     while ($row = mysqli_fetch_assoc($q)) {
                         // $mystring .= '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
                         $mystring .= "<tr>
