@@ -298,7 +298,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else if ($data == "timetable" && $type == "staff") {
         $q = mysqli_query(
             $conn,
-            "SELECT * FROM timetables where year=$semester and division 
+            "SELECT year,division,batch,timeslot,day,subject,staff FROM timetables where year=$semester and division 
             IN (SELECT DISTINCT division from associations WHERE staffId='$query'
                 UNION
                 SELECT DISTINCT division from batch_associations WHERE staffId='$query') 
