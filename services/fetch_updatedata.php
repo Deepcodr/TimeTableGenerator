@@ -302,7 +302,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             IN (SELECT DISTINCT division from associations WHERE staffId='$query'
                 UNION
                 SELECT DISTINCT division from batch_associations WHERE staffId='$query') 
-            group by timeslot,day,batch,division"
+            group by year,timeslot,day,batch,division,subject,staff"
         );
         $row_count = mysqli_num_rows($q);
 
