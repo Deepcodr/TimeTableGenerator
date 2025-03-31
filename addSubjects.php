@@ -111,6 +111,7 @@ if ($_SESSION["userloggedin"] == 1) {
 
     <!-- Custom styles for this template -->
     <link href="sidebars.css" rel="stylesheet">
+    <script src="./js/formvalidations.js"></script>
 </head>
 
 <body>
@@ -250,7 +251,7 @@ if ($_SESSION["userloggedin"] == 1) {
             <div class="display-4">Add New Subject</div>
             <div class="container-fluid">
                 <!-- onsubmit="return validateRegistration()" -->
-                <form action="./services/registerSub.php" method="POST" class="form-signup">
+                <form action="./services/registerSub.php" method="POST" class="form-signup" onsubmit="return validateSubjectRegistration(event)">
                     <div class="mt-4 mb-3">
                         <label for="subjectcode" class="form-label">Subject Code</label>
                         <input type="text" id="subject-code" class="form-control" placeholder="Subject Code" required="" autofocus="" name="subjectcode">
@@ -273,7 +274,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     </div>
                     <div class="mb-3">
                         <label for="semester" class="form-label">Semester</label>
-                        <select class="form-select" aria-label="Default select example" name="semester">
+                        <select id="subject-year" class="form-select" aria-label="Default select example" name="semester">
                         <option selected disabled>Year</option>
                             <option value="1">First Year</option>
                             <option value="2">Second Year</option>
@@ -287,7 +288,7 @@ if ($_SESSION["userloggedin"] == 1) {
                     <input type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus="">
                     <input type="password" id="user-repeatpass" class="form-control" placeholder="Repeat Password" required autofocus="" name="password"> -->
 
-                    <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>
+                    <button class="btn btn-primary btn-block" type="submit">Add</button>
                 </form>
 
             </div>
