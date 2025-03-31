@@ -110,6 +110,7 @@ if ($_SESSION["userloggedin"] == 1) {
 
     <!-- Custom styles for this template -->
     <link href="sidebars.css" rel="stylesheet">
+    <script src="./js/formvalidations.js"></script>
 </head>
 
 <body>
@@ -250,29 +251,25 @@ if ($_SESSION["userloggedin"] == 1) {
             <div class="container-fluid">
 
                 <!-- onsubmit="return validateRegistration()" -->
-                <form action="./services/registerBatch.php" method="POST" class="form-signup">
+                <form action="./services/registerBatch.php" method="POST" class="form-signup" onsubmit="return validateBatchRegistration(event)">
                     <div class="mt-4 mb-3">
                         <label for="batch" class="form-label">Name</label>
                         <input type="text" id="batch-name" class="form-control" placeholder="Name of Batch" required="" autofocus="" name="batch">
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Select Year</label>
-                        <select class="form-select" aria-label="Default select example" name="year" onchange="fetch_updatedata(this.value)">
+                        <select id="batch-year" class="form-select" aria-label="Default select example" name="year" onchange="fetch_updatedata(this.value)">
                             <<option selected disabled>Select Year</option>
                             <option value="1">First Year</option>
                             <option value="2">Second Year</option>
                             <option value="3">Third Year</option>
                             <option value="4">Final Year</option>
-                            <!-- <option value="2">Two</option>
-                            <option value="3">Three</option> -->
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="division" class="form-label">Select Division to associate</label>
                         <select id="divisionselection" class="form-select" name="division">
                             <option selected disabled>Division</option>
-                            <!-- <option value="2">Two</option>
-                        <option value="3">Three</option> -->
                         </select>
                     </div>
                     <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Add</button>

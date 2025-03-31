@@ -110,6 +110,7 @@ if ($_SESSION["userloggedin"] == 1) {
 
     <!-- Custom styles for this template -->
     <link href="sidebars.css" rel="stylesheet">
+    <script src="./js/formvalidations.js"></script>
 </head>
 
 <body>
@@ -250,14 +251,14 @@ if ($_SESSION["userloggedin"] == 1) {
             <div class="container-fluid">
 
                 <!-- onsubmit="return validateRegistration()" -->
-                <form action="./services/registerDiv.php" method="POST" class="form-signup">
+                <form action="./services/registerDiv.php" method="POST" class="form-signup" onsubmit="return validateDivisionRegistration(event)">
                     <div class="mt-4 mb-3">
                         <label for="division" class="form-label">Division</label>
                         <input type="text" id="division-name" class="form-control" placeholder="Division" required="" autofocus="" name="division">
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Select Year</label>
-                        <select class="form-select" aria-label="Default select example" name="year">
+                        <select id="division-year" class="form-select" aria-label="Default select example" name="year">
                             <option disabled>Select Year</option>
                             <option value="1">First Year</option>
                             <option value="2">Second Year</option>
