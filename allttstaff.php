@@ -208,47 +208,8 @@ if ($_SESSION["userloggedin"] == 1) {
 							<?php
 							include('../TimeTableGenerator/includes/dbconnection.php');
 
-							$associations = [];
-							$subjects = [];
-
 							try {
-								$year = 2;
-								$sql = mysqli_prepare($conn, "SELECT * FROM associations WHERE year=?");
-								$sql->bind_param("i", $year);
-							} catch (Exception $e) {
-								echo $e->getMessage();
-								// die;
-							}
-
-							$sql->execute();
-							$data = $sql->get_result();
-
-							// echo mysqli_fetch_assoc($data);
-							while ($row = mysqli_fetch_assoc($data)) {
-								$associations[$row['division']][$row['staffid']] = $row['subjectname'];
-							}
-
-							try {
-								$year = 2;
-								$sql = mysqli_prepare($conn, "SELECT distinct subject_code , subject_name FROM subjects WHERE semester=? and subject_code!='OFF'");
-								$sql->bind_param("i", $year);
-							} catch (Exception $e) {
-								echo $e->getMessage();
-								// die;
-							}
-
-							$sql->execute();
-							$data = $sql->get_result();
-
-							// echo mysqli_fetch_assoc($data);
-							while ($row = mysqli_fetch_assoc($data)) {
-								$subjects[$row['subject_code']] = $row['subject_name'];
-							}
-
-							try {
-								$year = 2;
-								$sql = mysqli_prepare($conn, "SELECT * from timetable_status where year=? and status=1");
-								$sql->bind_param("i", $year);
+								$sql = mysqli_prepare($conn, "SELECT * from timetable_status where status=1");
 							} catch (Exception $e) {
 								echo $e->getMessage();
 								// die;
@@ -305,7 +266,7 @@ if ($_SESSION["userloggedin"] == 1) {
 	function displayexistingtt(timetable) {
 		console.log(timetable);
 		var container = document.getElementById('timetables');
-
+		container.innerHTML=""
 		const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		const timeSlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 11:15 AM', '11:15 AM - 12:15 PM', '12:15 PM - 1:15 PM', '1:15 PM - 2:15 PM', '2:15 PM - 3:15 PM', '3:15 PM - 4:15 PM'];
 
